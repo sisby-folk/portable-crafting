@@ -1,25 +1,26 @@
 {
 	"schema_version": 1,
 	"quilt_loader": {
-		"group": "com.example",
-		"id": "example_mod",
+		"group": "folk.sisby",
+		"id": "portable-crafting-standalone",
 		"version": "${version}",
 		"metadata": {
-			"name": "Mod Name",
-			"description": "A short description of your mod.",
+			"name": "Portable Crafting Standalone",
+			"description": "A mod for Quilt that allows using crafting tables in your inventory.",
 			"contributors": {
 				"Me!": "Owner"
 			},
 			"contact": {
-				"homepage": "https://example.com/",
-				"issues": "https://github.com/QuiltMC/quilt-template-mod/issues",
-				"sources": "https://github.com/QuiltMC/quilt-template-mod"
+				"homepage": "https://modrinth.com/mod/portable-crafting-standalone",
+				"issues": "https://github.com/sisby-folk/portable-crafting-standalone/issues",
+				"sources": "https://github.com/sisby-folk/portable-crafting-standalone"
 			},
-			"icon": "assets/example_mod/icon.png"
+			"icon": "assets/portable_crafting_standalone/icon.png"
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-			"init": "com.example.example_mod.ExampleMod"
+			"init": "folk.sisby.portable_crafting_standalone.PortableCraftingStandalone",
+			"client_init": "folk.sisby.portable_crafting_standalone.PortableCraftingStandaloneClient"
 		},
 		"depends": [
 			{
@@ -36,5 +37,5 @@
 			}
 		]
 	},
-	"mixin": "example_mod.mixins.json"
+	"mixin": "portable_crafting_standalone.mixins.json"
 }

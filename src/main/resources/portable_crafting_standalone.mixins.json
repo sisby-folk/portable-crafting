@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "folk.sisby.portable_crafting_standalone.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "TitleScreenMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}
