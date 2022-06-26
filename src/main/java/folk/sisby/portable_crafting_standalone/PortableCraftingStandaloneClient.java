@@ -12,6 +12,7 @@ public class PortableCraftingStandaloneClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient(ModContainer mod) {
 		CLIENT_LOGGER.info("Initializing {}!", mod.metadata().name());
+
 		PortableCraftingClient.runWhenEnabled();
 	}
 }

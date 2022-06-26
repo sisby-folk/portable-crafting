@@ -1,6 +1,5 @@
 package folk.sisby.portable_crafting_standalone.network;
 
-import folk.sisby.portable_crafting_standalone.helper.LogHelper;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
@@ -35,7 +34,6 @@ public abstract class ClientSender {
             callback.accept(buffer);
         }
 
-        debug("Sending message `" + id + "` to server.");
         ClientPlayNetworking.send(id, buffer);
     }
 
@@ -53,15 +51,5 @@ public abstract class ClientSender {
         }
 
         return id;
-    }
-
-    protected void debug(String message) {
-        if (showDebugMessages()) {
-            LogHelper.debug(getClass(), message);
-        }
-    }
-
-    protected boolean showDebugMessages() {
-        return true;
     }
 }

@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import folk.sisby.portable_crafting_standalone.helper.LogHelper;
 import net.minecraft.util.Identifier;
 
 import javax.annotation.Nullable;
@@ -34,12 +33,6 @@ public abstract class ServerSender {
         return id;
     }
 
-    protected void debug(String message) {
-        if (showDebugMessages()) {
-            LogHelper.debug(getClass(), message);
-        }
-    }
-
     protected boolean showDebugMessages() {
         return true;
     }
@@ -63,7 +56,6 @@ public abstract class ServerSender {
             callback.accept(buffer);
         }
 
-        debug("Sending message `" + id + "` to " + player.getUuid());
         ServerPlayNetworking.send(player, id, buffer);
     }
 

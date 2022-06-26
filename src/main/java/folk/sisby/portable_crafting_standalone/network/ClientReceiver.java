@@ -7,7 +7,6 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
-import folk.sisby.portable_crafting_standalone.helper.LogHelper;
 
 import java.util.Optional;
 
@@ -18,7 +17,6 @@ import java.util.Optional;
 @SuppressWarnings("unused")
 public abstract class ClientReceiver {
     protected Identifier id; // cached message ID
-    protected int warnings = 0;
 
     public ClientReceiver() {
         ClientPlayNetworking.registerGlobalReceiver(id(), this::handleInternal);
@@ -40,26 +38,10 @@ public abstract class ClientReceiver {
         return id;
     }
 
-    protected void debug(String message) {
-        if (showDebugMessages()) {
-            LogHelper.debug(getClass(), message);
-        }
-    }
-
-    protected boolean showDebugMessages() {
-        return true;
-    }
-
     protected void handleInternal(MinecraftClient client, ClientPlayNetworkHandler listener, PacketByteBuf buffer, PacketSender sender) {
-        debug("Received message `" + id + "` from server.");
-
         try {
             handle(client, buffer);
-        } catch (Exception e) {
-            if (warnings < 10) {
-                debug("Exception when handling message from client: " + e.getMessage());
-                warnings++;
-            }
+        } catch (Exception ignored) {
         }
     }
 
