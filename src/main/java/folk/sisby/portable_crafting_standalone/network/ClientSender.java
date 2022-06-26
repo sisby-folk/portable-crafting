@@ -1,10 +1,10 @@
 package folk.sisby.portable_crafting_standalone.network;
 
+import folk.sisby.portable_crafting_standalone.helper.LogHelper;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import folk.sisby.portable_crafting_standalone.helper.LogHelper;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.Identifier;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
@@ -14,7 +14,7 @@ import java.util.function.Consumer;
  */
 @SuppressWarnings("unused")
 public abstract class ClientSender {
-    protected ResourceLocation id; // cached message ID
+    protected Identifier id; // cached message ID
 
     /**
      * Send an empty message to the server.
@@ -27,9 +27,9 @@ public abstract class ClientSender {
     /**
      * Send message to server with packet data.
      */
-    public void send(@Nullable Consumer<FriendlyByteBuf> callback) {
+    public void send(@Nullable Consumer<PacketByteBuf> callback) {
         var id = id();
-        var buffer = new FriendlyByteBuf(Unpooled.buffer());
+        var buffer = new PacketByteBuf(Unpooled.buffer());
 
         if (callback != null) {
             callback.accept(buffer);
@@ -42,11 +42,11 @@ public abstract class ClientSender {
     /**
      * Cache and fetch the message ID from the annotation.
      */
-    protected ResourceLocation id() {
+    protected Identifier id() {
         if (id == null) {
             if (getClass().isAnnotationPresent(Id.class)) {
                 var annotation = getClass().getAnnotation(Id.class);
-                id = new ResourceLocation(annotation.value());
+                id = new Identifier(annotation.value());
             } else {
                 throw new IllegalStateException("Missing ID for `" + getClass() + "`");
             }

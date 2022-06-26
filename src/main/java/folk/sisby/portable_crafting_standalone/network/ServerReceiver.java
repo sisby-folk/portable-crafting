@@ -2,13 +2,13 @@ package folk.sisby.portable_crafting_standalone.network;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
 import folk.sisby.portable_crafting_standalone.helper.LogHelper;
+import net.minecraft.util.Identifier;
 
 import java.util.Optional;
 
@@ -19,7 +19,7 @@ import java.util.Optional;
 @SuppressWarnings("unused")
 public abstract class ServerReceiver {
     private int warnings = 0;
-    private ResourceLocation id; // cached message ID
+    private Identifier id; // cached message ID
 
     public ServerReceiver() {
         var id = id();
@@ -29,11 +29,11 @@ public abstract class ServerReceiver {
     /**
      * Cache and fetch the message ID from the annotation.
      */
-    private ResourceLocation id() {
+    private Identifier id() {
         if (id == null) {
             if (getClass().isAnnotationPresent(Id.class)) {
                 var annotation = getClass().getAnnotation(Id.class);
-                id = new ResourceLocation(annotation.value());
+                id = new Identifier(annotation.value());
             } else {
                 throw new IllegalStateException("Missing ID for `" + getClass() + "`");
             }
@@ -52,9 +52,9 @@ public abstract class ServerReceiver {
         return true;
     }
 
-    private void handleInternal(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl listener, FriendlyByteBuf buffer, PacketSender sender) {
+    private void handleInternal(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler listener, PacketByteBuf buffer, PacketSender sender) {
         var id = id();
-        debug("Received message `" + id + "` from client " + player.getUUID() + ".");
+        debug("Received message `" + id + "` from client " + player.getUuid() + ".");
 
         try {
             handle(server, player, buffer);
@@ -69,12 +69,12 @@ public abstract class ServerReceiver {
      * Handle the message reading from the buffer and then executing on the client.
      * If exceptions are thrown here then they are caught by handleInternal.
      */
-    public abstract void handle(MinecraftServer server, ServerPlayer player, FriendlyByteBuf buffer);
+    public abstract void handle(MinecraftServer server, ServerPlayerEntity player, PacketByteBuf buffer);
 
     /**
      * Convenience method to read a wrapped optional compound tag from a buffer.
      */
-    public Optional<CompoundTag> getCompoundTag(FriendlyByteBuf buffer) {
+    public Optional<NbtCompound> getNbtCompound(PacketByteBuf buffer) {
         return Optional.ofNullable(buffer.readNbt());
     }
 }

@@ -2,11 +2,11 @@ package folk.sisby.portable_crafting_standalone.network;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.Identifier;
 import folk.sisby.portable_crafting_standalone.helper.LogHelper;
 
 import java.util.Optional;
@@ -17,7 +17,7 @@ import java.util.Optional;
  */
 @SuppressWarnings("unused")
 public abstract class ClientReceiver {
-    protected ResourceLocation id; // cached message ID
+    protected Identifier id; // cached message ID
     protected int warnings = 0;
 
     public ClientReceiver() {
@@ -27,11 +27,11 @@ public abstract class ClientReceiver {
     /**
      * Cache and fetch the message ID from the annotation.
      */
-    protected ResourceLocation id() {
+    protected Identifier id() {
         if (id == null) {
             if (getClass().isAnnotationPresent(Id.class)) {
                 var annotation = getClass().getAnnotation(Id.class);
-                id = new ResourceLocation(annotation.value());
+                id = new Identifier(annotation.value());
             } else {
                 throw new IllegalStateException("Missing ID for `" + getClass() + "`");
             }
@@ -50,7 +50,7 @@ public abstract class ClientReceiver {
         return true;
     }
 
-    protected void handleInternal(Minecraft client, ClientPacketListener listener, FriendlyByteBuf buffer, PacketSender sender) {
+    protected void handleInternal(MinecraftClient client, ClientPlayNetworkHandler listener, PacketByteBuf buffer, PacketSender sender) {
         debug("Received message `" + id + "` from server.");
 
         try {
@@ -67,12 +67,12 @@ public abstract class ClientReceiver {
      * Handle the message reading from the buffer and then executing on the client.
      * If exceptions are thrown here then they are caught by handleInternal.
      */
-    public abstract void handle(Minecraft client, FriendlyByteBuf buffer);
+    public abstract void handle(MinecraftClient client, PacketByteBuf buffer);
 
     /**
      * Convenience method to read a wrapped optional compound tag from a buffer.
      */
-    public Optional<CompoundTag> getCompoundTag(FriendlyByteBuf buffer) {
+    public Optional<NbtCompound> getNbtCompound(PacketByteBuf buffer) {
         return Optional.ofNullable(buffer.readNbt());
     }
 }

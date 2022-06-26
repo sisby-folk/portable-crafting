@@ -2,11 +2,11 @@ package folk.sisby.portable_crafting_standalone.network;
 
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import folk.sisby.portable_crafting_standalone.helper.LogHelper;
+import net.minecraft.util.Identifier;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
@@ -16,16 +16,16 @@ import java.util.function.Consumer;
  */
 @SuppressWarnings("unused")
 public abstract class ServerSender {
-    protected ResourceLocation id; // cached message ID
+    protected Identifier id; // cached message ID
 
     /**
      * Cache and fetch the message ID from the annotation.
      */
-    protected ResourceLocation id() {
+    protected Identifier id() {
         if (id == null) {
             if (getClass().isAnnotationPresent(Id.class)) {
                 var annotation = getClass().getAnnotation(Id.class);
-                id = new ResourceLocation(annotation.value());
+                id = new Identifier(annotation.value());
             } else {
                 throw new IllegalStateException("Missing ID for `" + getClass() + "`");
             }
@@ -48,22 +48,22 @@ public abstract class ServerSender {
      * Send an empty message to a player client.
      * Typically this is used to request that the client perform a specific action.
      */
-    public void send(ServerPlayer player) {
+    public void send(ServerPlayerEntity player) {
         send(player, null);
     }
 
     /**
      * Send message with packet data to a player client.
      */
-    public void send(ServerPlayer player, @Nullable Consumer<FriendlyByteBuf> callback) {
+    public void send(ServerPlayerEntity player, @Nullable Consumer<PacketByteBuf> callback) {
         var id = id();
-        var buffer = new FriendlyByteBuf(Unpooled.buffer());
+        var buffer = new PacketByteBuf(Unpooled.buffer());
 
         if (callback != null) {
             callback.accept(buffer);
         }
 
-        debug("Sending message `" + id + "` to " + player.getUUID());
+        debug("Sending message `" + id + "` to " + player.getUuid());
         ServerPlayNetworking.send(player, id, buffer);
     }
 
@@ -77,8 +77,8 @@ public abstract class ServerSender {
     /**
      * Send message with packet data to all connected player clients.
      */
-    public void sendToAll(MinecraftServer server, @Nullable Consumer<FriendlyByteBuf> callback) {
-        var playerList = server.getPlayerList();
-        playerList.getPlayers().forEach(player -> send(player, callback));
+    public void sendToAll(MinecraftServer server, @Nullable Consumer<PacketByteBuf> callback) {
+        var playerList = server.getPlayerManager();
+        playerList.getPlayerList().forEach(player -> send(player, callback));
     }
 }
