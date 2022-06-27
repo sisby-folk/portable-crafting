@@ -5,7 +5,6 @@ import folk.sisby.portable_crafting_standalone.module.portable_crafting.network.
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBind;
-import net.minecraft.entity.player.PlayerEntity;
 import org.lwjgl.glfw.GLFW;
 
 public class PortableCraftingClient{
@@ -31,12 +30,6 @@ public class PortableCraftingClient{
                 }
             });
         }
-    }
-
-    private boolean hasCrafting(PlayerEntity player) {
-        return true;
-		// Below isn't correctly implemented in charm itself. Tag-based conception of "crafting table" should be implemented later.
-		// return player.getInventory().contains(PortableCraftingStandalone.CRAFTING_TABLES);
     }
 
     public static void openCraftingTable() {

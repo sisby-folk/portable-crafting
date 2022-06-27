@@ -8,7 +8,7 @@ import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandlerContext;
 
 public class PortableCrafting {
-    private static final Text LABEL = new TranslatableText("container.portable_crafting_standalone.portable_crafting_table");
+    public static final Text LABEL = new TranslatableText("container.portable_crafting_standalone.portable_crafting_table");
 
     public static ServerReceiveOpenCrafting SERVER_RECEIVE_OPEN_CRAFTING;
 
@@ -19,7 +19,7 @@ public class PortableCrafting {
     }
 
     public static void openContainer(ServerPlayerEntity player) {
-        player.closeHandledScreen();
+        // player.closeHandledScreen(); - Look into whether we should be doing this or not. Enables using the hotkey while the inventory is open, but it just kinda looks bad.
         player.openHandledScreen(new SimpleNamedScreenHandlerFactory((i, inv, p) -> new PortableCraftingScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), LABEL));
     }
 

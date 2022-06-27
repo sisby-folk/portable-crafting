@@ -35,7 +35,7 @@ dependencies {
 	// Quilted Fabric API will automatically pull in the correct QSL version.
 	modImplementation libs.quilted.fabric.api
 
-	modImplementation "com.github.Andrew6rant:inventorytabs:0.4.4-1.18.x"
+	modImplementation "com.github.Andrew6rant:InventoryTabs:inventorytabs-0.6.1-1.18.x"
 }
 
 processResources {
