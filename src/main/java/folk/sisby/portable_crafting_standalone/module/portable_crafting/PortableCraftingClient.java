@@ -39,7 +39,7 @@ public class PortableCraftingClient{
 		// return player.getInventory().contains(PortableCraftingStandalone.CRAFTING_TABLES);
     }
 
-    private static void openCraftingTable() {
+    public static void openCraftingTable() {
         CLIENT_SEND_OPEN_CRAFTING.send();
     }
 }
