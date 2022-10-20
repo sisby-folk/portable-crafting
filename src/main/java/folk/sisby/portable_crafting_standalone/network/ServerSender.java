@@ -1,11 +1,11 @@
 package folk.sisby.portable_crafting_standalone.network;
 
 import io.netty.buffer.Unpooled;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;

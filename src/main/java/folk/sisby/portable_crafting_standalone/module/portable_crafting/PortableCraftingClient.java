@@ -2,10 +2,10 @@ package folk.sisby.portable_crafting_standalone.module.portable_crafting;
 
 import com.mojang.blaze3d.platform.InputUtil;
 import folk.sisby.portable_crafting_standalone.module.portable_crafting.network.ClientSendOpenCrafting;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBind;
 import org.lwjgl.glfw.GLFW;
+import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
 
 public class PortableCraftingClient{
     public static KeyBind keyBinding;
@@ -23,7 +23,7 @@ public class PortableCraftingClient{
                 "key.categories.inventory"
             ));
 
-            ClientTickEvents.END_WORLD_TICK.register(level -> {
+            ClientTickEvents.END.register(level -> {
                 if (keyBinding == null || level == null) return;
                 while (keyBinding.wasPressed()) {
                     openCraftingTable();

@@ -12,3 +12,32 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
+
+dependencyResolutionManagement {
+	versionCatalogs {
+		libs {
+			def mc_major = '1.18'
+			def mc = mc_major + '.2'
+
+			// // Base // //
+			version('minecraft', mc)
+			version('ql', "0.17.3")
+			version('qsl', "1.1.0-beta.26+${mc}")
+			version('qfapi', "1.0.0-beta.24+0.58.0-${mc}")
+
+			library('minecraft', 'mojang', 'minecraft').versionRef('minecraft')
+			library('ql', 'org.quiltmc', 'quilt-loader').versionRef('ql')
+			library('qsl', 'org.quiltmc', 'qsl').versionRef('qsl')
+			library('qfapi', 'org.quiltmc.quilted-fabric-api', 'quilted-fabric-api', ).versionRef('qfapi')
+
+			// // Libraries // //
+
+
+			// // Compat // //
+			version('inventoryTabs', "inventorytabs-0.8.1-1.18.x")
+
+			library('inventoryTabs', 'maven.modrinth', 'inventory-tabs-updated').versionRef('inventoryTabs')
+
+		}
+	}
+}
