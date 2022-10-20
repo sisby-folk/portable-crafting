@@ -42,7 +42,12 @@ repositories {
 			}
 		}
 	}
+	// Cloth
+	maven {
+		url "https://maven.shedaniel.me/"
+	}
 }
+
 
 dependencies {
 	// // Base // //
@@ -60,9 +65,15 @@ dependencies {
 
 	// Inventory Tabs
 	modCompileOnly libs.inventoryTabs
-	modLocalRuntime libs.inventoryTabs
+	// modLocalRuntime libs.inventoryTabs
+	modLocalRuntime libs.clothConfig
 
 }
+
+loom {
+	accessWidenerPath = file("src/main/resources/portable_crafting_standalone.accesswidener")
+}
+
 
 processResources {
 	inputs.property "version", version

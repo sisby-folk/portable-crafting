@@ -5,11 +5,10 @@
   "plugin": "folk.sisby.portable_crafting_standalone.mixin.compat.MixinCompatPlugin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "compat.inventorytabs.CraftingScreenTabMixin"
   ],
   "client": [
   ],
   "injectors": {
     "defaultRequire": 1
-	}
+  }
 }

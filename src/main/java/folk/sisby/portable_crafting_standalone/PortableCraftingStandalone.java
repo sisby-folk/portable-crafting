@@ -1,7 +1,7 @@
 package folk.sisby.portable_crafting_standalone;
 
-import folk.sisby.portable_crafting_standalone.module.portable_crafting.PortableCraftingScreenHandler;
-import folk.sisby.portable_crafting_standalone.tabs.InventoryTabCompat;
+import folk.sisby.portable_crafting_standalone.screens.PortableCraftingScreenHandler;
+import folk.sisby.portable_crafting_standalone.compat.inventory_tabs.PortableCraftingTab;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandlerContext;
@@ -21,9 +21,7 @@ public class PortableCraftingStandalone implements ModInitializer {
 
 	public static final Text LABEL = new TranslatableText("container.portable_crafting_standalone.portable_crafting_table");
 
-	public static boolean enableKeybind = true;
-
-	public static final String ID = "portablecraftingstandalone";
+	public static final String ID = "portable_crafting_standalone";
 	public static final Identifier ID_OPEN_CRAFTING_TABLE = new Identifier("portable_crafting_standalone", "open_crafting_table");
 
 	public static Identifier id(String path) {
@@ -35,17 +33,15 @@ public class PortableCraftingStandalone implements ModInitializer {
 		LOGGER.info("Initializing {}!", mod.metadata().name());
 
 		if (QuiltLoader.isModLoaded("inventorytabs")) {
-			InventoryTabCompat.init();
+			PortableCraftingTab.touch();
 		}
+
+		PortableCraftingScreenHandler.touch();
 
 		ServerPlayNetworking.registerGlobalReceiver(ID_OPEN_CRAFTING_TABLE, (server, player, handler, buf, sender) -> server.execute(() -> {
 			if (player.getInventory().contains(new ItemStack(Blocks.CRAFTING_TABLE))) {
-				// player.closeHandledScreen(); - Required to use keybind when screen is open
 				player.openHandledScreen(new SimpleNamedScreenHandlerFactory((i, inv, p) -> new PortableCraftingScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), LABEL));
 			}
 		}));
-
-		// TODO: - Make it pick the right tab when opening using the hotkey
-		// 		 - Make it update the tabs while its open so there's no sillyness
 	}
 }

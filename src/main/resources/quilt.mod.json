@@ -25,7 +25,7 @@
 		"depends": [
 			{
 				"id": "quilt_loader",
-				"versions": ">=0.16.0-"
+				"versions": ">=0.17.4-"
 			},
 			{
 				"id": "minecraft",
@@ -38,5 +38,6 @@
 			}
 		]
 	},
-	"mixin": "portable_crafting_standalone.mixins.json"
+	"mixin": "portable_crafting_standalone.mixins.json",
+	"accessWidener": "portable_crafting_standalone.accesswidener"
 }

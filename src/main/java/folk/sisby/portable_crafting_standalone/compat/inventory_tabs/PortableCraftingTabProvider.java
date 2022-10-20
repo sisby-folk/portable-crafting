@@ -1,4 +1,4 @@
-package folk.sisby.portable_crafting_standalone.tabs;
+package folk.sisby.portable_crafting_standalone.compat.inventory_tabs;
 
 import com.kqp.inventorytabs.tabs.provider.TabProvider;
 import com.kqp.inventorytabs.tabs.tab.Tab;
@@ -17,6 +17,6 @@ public class PortableCraftingTabProvider implements TabProvider {
 			if (tabs.stream().noneMatch(c -> c instanceof PortableCraftingTab)) {
 				tabs.add(tab);
 			}
-		};
+		}
 	}
 }
