@@ -40,6 +40,7 @@ public class PortableCraftingStandalone implements ModInitializer {
 
 		ServerPlayNetworking.registerGlobalReceiver(ID_OPEN_CRAFTING_TABLE, (server, player, handler, buf, sender) -> server.execute(() -> {
 			if (player.getInventory().contains(new ItemStack(Blocks.CRAFTING_TABLE))) {
+				player.closeHandledScreen();
 				player.openHandledScreen(new SimpleNamedScreenHandlerFactory((i, inv, p) -> new PortableCraftingScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), LABEL));
 			}
 		}));
