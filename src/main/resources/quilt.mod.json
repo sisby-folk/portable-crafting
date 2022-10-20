@@ -15,12 +15,12 @@
 				"issues": "https://github.com/sisby-folk/portable-crafting-standalone/issues",
 				"sources": "https://github.com/sisby-folk/portable-crafting-standalone"
 			},
-			"icon": "assets/portable_crafting_standalone/icon.png"
+			"icon": "assets/portable_crafting/icon.png"
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-			"init": "folk.sisby.portable_crafting_standalone.PortableCraftingStandalone",
-			"client_init": "folk.sisby.portable_crafting_standalone.PortableCraftingStandaloneClient"
+			"init": "folk.sisby.portable_crafting.PortableCrafting",
+			"client_init": "folk.sisby.portable_crafting.PortableCraftingClient"
 		},
 		"depends": [
 			{
@@ -38,6 +38,6 @@
 			}
 		]
 	},
-	"mixin": "portable_crafting_standalone.mixins.json",
-	"access_widener": "portable_crafting_standalone.accesswidener"
+	"mixin": "portable_crafting.mixins.json",
+	"access_widener": "portable_crafting.accesswidener"
 }

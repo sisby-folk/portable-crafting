@@ -1,4 +1,4 @@
-package folk.sisby.portable_crafting_standalone.mixin.compat;
+package folk.sisby.portable_crafting.mixin.compat;
 
 import org.objectweb.asm.tree.ClassNode;
 import org.quiltmc.loader.api.QuiltLoader;
@@ -11,7 +11,6 @@ import java.util.Set;
 public class MixinCompatPlugin implements IMixinConfigPlugin {
 	@Override
 	public void onLoad(String mixinPackage) {
-
 	}
 
 	@Override
@@ -21,7 +20,7 @@ public class MixinCompatPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		if (mixinClassName.startsWith("folk.sisby.portable_crafting_standalone.mixin.compat.")) {
+		if (mixinClassName.startsWith("folk.sisby.portable_crafting.mixin.compat.")) {
 			int startModID = mixinClassName.indexOf(".compat.") + ".compat.".length();
 			int endModID = mixinClassName.indexOf('.', startModID);
 			String modID = mixinClassName.substring(startModID, endModID);

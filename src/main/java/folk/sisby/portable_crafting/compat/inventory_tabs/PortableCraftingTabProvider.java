@@ -1,4 +1,4 @@
-package folk.sisby.portable_crafting_standalone.compat.inventory_tabs;
+package folk.sisby.portable_crafting.compat.inventory_tabs;
 
 import com.kqp.inventorytabs.tabs.provider.TabProvider;
 import com.kqp.inventorytabs.tabs.tab.Tab;

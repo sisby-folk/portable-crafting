@@ -71,7 +71,7 @@ dependencies {
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/portable_crafting_standalone.accesswidener")
+	accessWidenerPath = file("src/main/resources/portable_crafting.accesswidener")
 }
 
 
