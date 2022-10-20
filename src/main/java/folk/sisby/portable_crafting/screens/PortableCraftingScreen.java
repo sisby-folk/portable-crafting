@@ -5,10 +5,9 @@ import net.minecraft.client.gui.screen.ingame.CraftingScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.CraftingScreenHandler;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
 public class PortableCraftingScreen extends CraftingScreen {
-	public static final Text LABEL = new TranslatableText("container.portable_crafting.portable_crafting_table");
+	public static final Text LABEL = Text.translatable("container.portable_crafting.portable_crafting_table");
 
 	public static boolean TABS_COMPAT = false;
 

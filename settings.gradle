@@ -16,26 +16,29 @@ pluginManagement {
 dependencyResolutionManagement {
 	versionCatalogs {
 		libs {
-			def mc_major = '1.18'
+			def mc_major = '1.19'
 			def mc = mc_major + '.2'
+			def mappings = 19
 
 			// // Base // //
 			version('minecraft', mc)
 			version('ql', "0.17.4")
-			version('qsl', "1.1.0-beta.26+${mc}")
-			version('qfapi', "1.0.0-beta.24+0.58.0-${mc}")
+			version('qsl', "3.0.0-beta.18+${mc}")
+			version('qfapi', "4.0.0-beta.16+0.64.0-${mc}")
+			version('quiltMappings', "${mc}+build.${mappings}")
 
 			library('minecraft', 'mojang', 'minecraft').versionRef('minecraft')
 			library('ql', 'org.quiltmc', 'quilt-loader').versionRef('ql')
 			library('qsl', 'org.quiltmc', 'qsl').versionRef('qsl')
 			library('qfapi', 'org.quiltmc.quilted-fabric-api', 'quilted-fabric-api', ).versionRef('qfapi')
+			library('quiltMappings', 'org.quiltmc', 'quilt-mappings').versionRef('quiltMappings')
 
 			// // Libraries // //
 
 
 			// // Compat // //
-			version('inventoryTabs', "inventorytabs-0.8.1-1.18.x")
-			version('clothConfig', "6.1.48")
+			version('inventoryTabs', "inventorytabs-0.8.1-1.19.x")
+			version('clothConfig', "7.0.72")
 
 			library('inventoryTabs', 'maven.modrinth', 'inventory-tabs-updated').versionRef('inventoryTabs')
 			library('clothConfig', 'me.shedaniel.cloth', 'cloth-config-fabric').versionRef('clothConfig')
