@@ -39,5 +39,5 @@
 		]
 	},
 	"mixin": "portable_crafting_standalone.mixins.json",
-	"accessWidener": "portable_crafting_standalone.accesswidener"
+	"access_widener": "portable_crafting_standalone.accesswidener"
 }
