@@ -30,7 +30,7 @@ public class PortableCrafting implements ModInitializer {
 
 	@Override
 	public void onInitialize(ModContainer mod) {
-		LOGGER.info("Portable Crafting Initialized!");
+		LOGGER.info("Portable Crafting Initializing!");
 
 		if (QuiltLoader.isModLoaded("inventorytabs")) {
 			PortableCraftingTab.touch();

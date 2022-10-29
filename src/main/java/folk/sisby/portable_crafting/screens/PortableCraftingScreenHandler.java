@@ -1,7 +1,6 @@
 package folk.sisby.portable_crafting.screens;
 
 import folk.sisby.portable_crafting.PortableCrafting;
-import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.CraftingScreenHandler;
@@ -22,7 +21,6 @@ public class PortableCraftingScreenHandler extends CraftingScreenHandler {
 	}
 
 	public static void touch() {
-		HandledScreens.register(PORTABLE_CRAFTING_HANDLER_TYPE, PortableCraftingScreen::new);
 	}
 
 	@Override
