@@ -26,7 +26,9 @@ public class PortableCraftingClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient(ModContainer mod) {
-		LOGGER.info("Portable Crafting Client Initialized!");
+		LOGGER.info("Portable Crafting Client Initializing!");
+
+		PortableCraftingScreen.touch();
 
 		if (QuiltLoader.isModLoaded("inventorytabs")) {
 			PortableCraftingScreen.TABS_COMPAT = true;
