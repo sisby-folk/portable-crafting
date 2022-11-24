@@ -1,7 +1,6 @@
 package folk.sisby.portable_crafting;
 
 import folk.sisby.portable_crafting.compat.inventory_tabs.PortableCraftingTab;
-import folk.sisby.portable_crafting.screens.PortableCraftingScreen;
 import folk.sisby.portable_crafting.screens.PortableCraftingScreenHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -41,7 +40,7 @@ public class PortableCrafting implements ModInitializer {
 		ServerPlayNetworking.registerGlobalReceiver(C2S_OPEN_PORTABLE_CRAFTING, (server, player, handler, buf, sender) -> server.execute(() -> {
 			if (PortableCrafting.is_allowed(player)) {
 				player.closeHandledScreen();
-				player.openHandledScreen(new SimpleNamedScreenHandlerFactory((i, inv, p) -> new PortableCraftingScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), PortableCraftingScreen.LABEL));
+				player.openHandledScreen(new SimpleNamedScreenHandlerFactory((i, inv, p) -> new PortableCraftingScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), PortableCraftingScreenHandler.LABEL));
 			}
 		}));
 	}
