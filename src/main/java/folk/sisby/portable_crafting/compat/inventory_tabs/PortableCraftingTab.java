@@ -4,7 +4,7 @@ import com.kqp.inventorytabs.api.TabProviderRegistry;
 import com.kqp.inventorytabs.tabs.tab.Tab;
 import folk.sisby.portable_crafting.PortableCrafting;
 import folk.sisby.portable_crafting.PortableCraftingClient;
-import folk.sisby.portable_crafting.screens.PortableCraftingScreen;
+import folk.sisby.portable_crafting.screens.PortableCraftingScreenHandler;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -39,6 +39,6 @@ public class PortableCraftingTab extends Tab {
 
 	@Override
 	public Text getHoverText() {
-		return PortableCraftingScreen.LABEL;
+		return PortableCraftingScreenHandler.LABEL;
 	}
 }
