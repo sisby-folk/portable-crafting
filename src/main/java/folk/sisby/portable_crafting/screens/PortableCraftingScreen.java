@@ -10,8 +10,6 @@ import net.minecraft.text.Text;
 import static folk.sisby.portable_crafting.screens.PortableCraftingScreenHandler.PORTABLE_CRAFTING_HANDLER_TYPE;
 
 public class PortableCraftingScreen extends CraftingScreen {
-
-
 	static {
 		HandledScreens.register(PORTABLE_CRAFTING_HANDLER_TYPE, PortableCraftingScreen::new);
 	}

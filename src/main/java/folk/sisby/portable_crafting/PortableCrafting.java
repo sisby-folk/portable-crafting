@@ -24,7 +24,7 @@ public class PortableCrafting implements ModInitializer {
 	public static final Identifier C2S_OPEN_PORTABLE_CRAFTING = new Identifier(ID, "c2s_open_portable_crafting");
 
 	public static boolean is_allowed(PlayerEntity player) {
-		return player.getInventory().method_7382(CRAFTING_TABLES); // If tag in inventory
+		return player.getInventory().m_agfxrwtb(CRAFTING_TABLES); // If tag in inventory
 	}
 
 	@Override
