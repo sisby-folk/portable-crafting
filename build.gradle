@@ -10,7 +10,7 @@ buildscript {
 
 plugins {
 	id 'maven-publish'
-	id 'org.quiltmc.loom' version '0.12.+'
+	alias libs.plugins.loom
 }
 
 if (System.getenv("MODRINTH_TOKEN")) {
@@ -50,34 +50,33 @@ repositories {
 
 dependencies {
 	// // Base // //
-	minecraft libs.minecraft
-	mappings variantOf(libs.quiltMappings) { classifier "intermediary-v2" }
+	minecraft libs.mc
+	mappings variantOf(libs.qm) { classifier "intermediary-v2" }
 	modImplementation libs.ql
 	modImplementation libs.qsl
 	modImplementation libs.qfapi
 
-	// // Libraries // //
-
 	// // Compat // //
 
-	// Inventory Tabs
 	modCompileOnly libs.inventoryTabs
-	// modLocalRuntime libs.inventoryTabs
+	modLocalRuntime libs.inventoryTabs
 	modLocalRuntime libs.clothConfig
-
 }
 
 loom {
 	accessWidenerPath = file("src/main/resources/portable_crafting.accesswidener")
 }
 
-
 processResources {
-	inputs.property "version", version
+	final Map<String, String> map = [
+		"version"      : version.toString(),
+		"mc"           : libs.versions.mc.toString(),
+		"ql"           : version.toString(),
+		"inventoryTabs": version.toString(),
+	]
 
-	filesMatching('quilt.mod.json') {
-		expand "version": version
-	}
+	inputs.properties(map)
+	filesMatching('quilt.mod.json') { expand(map) }
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -116,7 +115,7 @@ publishing {
 if (System.getenv("MODRINTH_TOKEN")) {
 	modrinth {
 		token = System.getenv("MODRINTH_TOKEN")
-		projectId = 'portable-crafting-standalone'
+		projectId = 'portable-crafting'
 		versionNumber = project.version
 		versionName = origVersion
 		versionType = 'release'
@@ -128,7 +127,7 @@ if (System.getenv("MODRINTH_TOKEN")) {
 			required.project "qsl"
 			optional.project "inventory-tabs-updated"
 		}
-		changelog = "Changelog: https://github.com/sisby-folk/portable-crafting-standalone/releases/tag/v" + origVersion
+		changelog = "Changelog: https://github.com/sisby-folk/portable-crafting/releases/tag/v" + origVersion
 	}
 }
 
@@ -136,7 +135,7 @@ if (System.getenv("GITHUB_TOKEN")) {
 	githubRelease {
 		token System.getenv("GITHUB_TOKEN")
 		owner "sisby-folk"
-		repo "portable-crafting-standalone"
+		repo "portable-crafting"
 		tagName 'v' + origVersion
 		releaseName origVersion
 		targetCommitish default_branch

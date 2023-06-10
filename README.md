@@ -1,21 +1,19 @@
-## About
+<center>Access the crafting table in your inventory, with a hotkey or tab.</center>
 
-**Portable Crafting Standalone** is a Quilt mod allowing you to use a crafting table from your inventory.
-
-It's partially adapted from `portable-crafting` from [Charm](https://modrinth.com/mod/charm). 
+---
 
 Players with a crafting table in their inventory can use a hotkey (Default: `v`) to access the crafting menu at any time.
 
 ![screenshot](https://cdn.modrinth.com/data/qmVRzDCY/images/b49d505c780b335d895bc43760d81664c5e2533c.png)
 
-For those who prefer a GUI button, there is integration with [Inventory Tabs](https://modrinth.com/mod/inventory-tabs-updated) from 1.2.0 onwards - which we recommend.
+When [Inventory Tabs](https://modrinth.com/mod/inventory-tabs-updated) is installed, a tab appears as well.
 
 ![screenshot](https://user-images.githubusercontent.com/55819817/175871674-5d2e9c56-5355-49a5-a42f-fa77dd442eec.png)
 
-This mod uses the vanilla game's crafting screen, so is naturally compatible with other modded interactions with crafting tables, such as [EMI](https://modrinth.com/mod/emi) - which we also recommend.
+Also works fine with recipe auto-crafting in [EMI](https://modrinth.com/mod/emi).
 
-## Further Info
+## Afterword
 
-I'm a modpack developer - not a mod developer! I just wanted this for my modpack and to get some experience in. 
+All mods are built on the work of many others.
 
-If you want to port this mod, do it yourself!
+We made this mod for [Tinkerer's Quilt](https://modrinth.com/modpack/tinkerers-quilt) - our modpack about ease of play and vanilla content.

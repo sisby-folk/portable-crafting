@@ -2,18 +2,18 @@
 	"schema_version": 1,
 	"quilt_loader": {
 		"group": "folk.sisby",
-		"id": "portable-crafting-standalone",
+		"id": "portable-crafting",
 		"version": "${version}",
 		"metadata": {
-			"name": "Portable Crafting Standalone",
-			"description": "A mod for Quilt that allows using crafting tables in your inventory.",
+			"name": "Portable Crafting",
+			"description": "Allows using the crafting table in your inventory via a hotkey or tab.",
 			"contributors": {
-				"Sisby Folk": "Owner"
+				"Sisby Folk": "Co-Authors"
 			},
 			"contact": {
-				"homepage": "https://modrinth.com/mod/portable-crafting-standalone",
-				"issues": "https://github.com/sisby-folk/portable-crafting-standalone/issues",
-				"sources": "https://github.com/sisby-folk/portable-crafting-standalone"
+				"homepage": "https://modrinth.com/mod/portable-crafting",
+				"issues": "https://github.com/sisby-folk/portable-crafting/issues",
+				"sources": "https://github.com/sisby-folk/portable-crafting"
 			},
 			"icon": "assets/portable_crafting/icon.png"
 		},
@@ -24,16 +24,16 @@
 		},
 		"depends": [
 			{
-				"id": "quilt_loader",
-				"versions": ">=0.17.4-"
+				"id": "minecraft",
+				"versions": ">={mc}}"
 			},
 			{
-				"id": "minecraft",
-				"versions": ">=1.19.2"
+				"id": "quilt_loader",
+				"versions": ">={ql}}"
 			},
 			{
 				"id": "inventorytabs",
-				"versions": ">=0.6.0",
+				"versions": ">=${inventoryTabs}",
 				"optional": true
 			}
 		]
