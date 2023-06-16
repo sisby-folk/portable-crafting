@@ -25,11 +25,11 @@
 		"depends": [
 			{
 				"id": "minecraft",
-				"versions": ">={mc}"
+				"versions": ">=${mc}"
 			},
 			{
 				"id": "quilt_loader",
-				"versions": ">={ql}"
+				"versions": ">=${ql}"
 			},
 			{
 				"id": "quilted_fabric_api",
