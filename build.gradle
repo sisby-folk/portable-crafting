@@ -71,9 +71,9 @@ processResources {
 	final Map<String, String> map = [
 		"version"      : version.toString(),
 		"mc"           : libs.versions.mc.toString(),
-		"ql"           : version.toString(),
-		"qfapi"        : version.toString(),
-		"inventoryTabs": version.toString(),
+		"ql"           : libs.versions.ql.toString(),
+		"qfapi"        : libs.versions.qfapi.toString(),
+		"inventoryTabs": libs.versions.inventoryTabs.toString(),
 	]
 
 	inputs.properties(map)
