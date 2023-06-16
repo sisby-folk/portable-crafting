@@ -57,7 +57,6 @@ dependencies {
 	modImplementation libs.qfapi
 
 	// // Compat // //
-
 	modCompileOnly libs.inventoryTabs
 	modLocalRuntime libs.inventoryTabs
 	modLocalRuntime libs.clothConfig
@@ -86,10 +85,6 @@ tasks.withType(JavaCompile).configureEach {
 
 java {
 	withSourcesJar()
-
-	// If this mod is going to be a library, then it should also generate Javadocs in order to aid with development.
-	// Uncomment this line to generate them.
-	// withJavadocJar()
 }
 
 jar {
@@ -106,9 +101,7 @@ publishing {
 		}
 	}
 
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
 	repositories {
-
 	}
 }
 
