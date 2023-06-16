@@ -35,7 +35,7 @@ dependencyResolutionManagement {
 			library('ql', 'org.quiltmc', 'quilt-loader').versionRef('ql')
 			library('qm', 'org.quiltmc', 'quilt-mappings').versionRef('qm')
 			library('qsl', 'org.quiltmc', 'qsl').versionRef('qsl')
-			library('qfapi', 'org.quiltmc.quilted-fabric-api', 'quilted-fabric-api', ).versionRef('qfapi')
+			library('qfapi', 'org.quiltmc.quilted-fabric-api', 'quilted-fabric-api').versionRef('qfapi')
 
 			// // Libraries // //
 

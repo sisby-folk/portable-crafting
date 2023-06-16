@@ -72,6 +72,7 @@ processResources {
 		"version"      : version.toString(),
 		"mc"           : libs.versions.mc.toString(),
 		"ql"           : version.toString(),
+		"qfapi"        : version.toString(),
 		"inventoryTabs": version.toString(),
 	]
 
