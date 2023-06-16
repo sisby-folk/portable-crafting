@@ -4,11 +4,11 @@ import folk.sisby.portable_crafting.compat.inventory_tabs.PortableCraftingTab;
 import folk.sisby.portable_crafting.screens.PortableCraftingScreenHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.loader.api.QuiltLoader;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
@@ -20,7 +20,7 @@ public class PortableCrafting implements ModInitializer {
 	public static final String ID = "portable_crafting";
 	public static final Logger LOGGER = LoggerFactory.getLogger("Portable Crafting");
 
-	public static final TagKey<Item> CRAFTING_TABLES = TagKey.of(Registry.ITEM_KEY, new Identifier(ID, "crafting_tables"));
+	public static final TagKey<Item> CRAFTING_TABLES = TagKey.of(RegistryKeys.ITEM, new Identifier(ID, "crafting_tables"));
 	public static final Identifier C2S_OPEN_PORTABLE_CRAFTING = new Identifier(ID, "c2s_open_portable_crafting");
 
 	public static boolean is_allowed(PlayerEntity player) {
