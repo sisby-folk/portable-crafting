@@ -121,6 +121,7 @@ if (System.getenv("MODRINTH_TOKEN")) {
 			optional.project "inventory-tabs-updated"
 		}
 		changelog = "Changelog: https://github.com/sisby-folk/portable-crafting/releases/tag/v" + origVersion
+		syncBodyFrom = rootProject.file("README.md").text
 	}
 }
 
