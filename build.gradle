@@ -70,10 +70,10 @@ loom {
 processResources {
 	final Map<String, String> map = [
 		"version"      : version.toString(),
-		"mc"           : libs.versions.mc.toString(),
-		"ql"           : libs.versions.ql.toString(),
-		"qfapi"        : libs.versions.qfapi.toString(),
-		"inventoryTabs": libs.versions.inventoryTabs.toString(),
+		"mc"           : libs.versions.mc.get(),
+		"ql"           : libs.versions.ql.get(),
+		"qfapi"        : libs.versions.qfapi.get(),
+		"inventoryTabs": libs.versions.inventoryTabs.get(),
 	]
 
 	inputs.properties(map)
