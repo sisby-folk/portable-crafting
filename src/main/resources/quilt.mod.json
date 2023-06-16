@@ -37,7 +37,7 @@
 			},
 			{
 				"id": "inventorytabs",
-				"versions": ">=0.61",
+				"versions": ">=0.6.1",
 				"optional": true
 			}
 		]
