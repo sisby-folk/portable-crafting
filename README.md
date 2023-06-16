@@ -1,16 +1,14 @@
+<center><img src="https://cdn.modrinth.com/data/qmVRzDCY/images/b49d505c780b335d895bc43760d81664c5e2533c.png" alt="screenshot"/></center>
 <center>Access the crafting table in your inventory, with a hotkey or tab.</center>
+<center>Works well with <a href="https://modrinth.com/mod/inventory-tabs-updated">Inventory Tabs</a> and <a href="https://modrinth.com/mod/emi">EMI</a></center>
 
 ---
 
-Players with a crafting table in their inventory can use a hotkey (Default: `v`) to access the crafting menu at any time.
+Use a hotkey (Default: `v`) to access the crafting table in your inventory at any time.
 
-![screenshot](https://cdn.modrinth.com/data/qmVRzDCY/images/b49d505c780b335d895bc43760d81664c5e2533c.png)
-
-When [Inventory Tabs](https://modrinth.com/mod/inventory-tabs-updated) is installed, a tab appears as well.
+With inventory tabs, a tab is also shown.
 
 ![screenshot](https://user-images.githubusercontent.com/55819817/175871674-5d2e9c56-5355-49a5-a42f-fa77dd442eec.png)
-
-Also works fine with recipe auto-crafting in [EMI](https://modrinth.com/mod/emi).
 
 ## Afterword
 
