@@ -72,8 +72,7 @@ processResources {
 		"version"      : version.toString(),
 		"mc"           : libs.versions.mc.get(),
 		"ql"           : libs.versions.ql.get(),
-		"qfapi"        : libs.versions.qfapi.get(),
-		"inventoryTabs": libs.versions.inventoryTabs.get(),
+		"qfapi"        : libs.versions.qfapi.get()
 	]
 
 	inputs.properties(map)
