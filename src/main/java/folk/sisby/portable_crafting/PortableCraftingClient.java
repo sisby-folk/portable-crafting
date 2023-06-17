@@ -26,7 +26,7 @@ public class PortableCraftingClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient(ModContainer mod) {
-		LOGGER.info("Portable Crafting Client Initializing!");
+		LOGGER.info("[Portable Crafting Client] Initializing!");
 
 		PortableCraftingScreen.touch();
 
