@@ -19,8 +19,8 @@
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-			"init": "folk.sisby.portable_crafting.PortableCrafting",
-			"client_init": "folk.sisby.portable_crafting.PortableCraftingClient"
+			"main": "folk.sisby.portable_crafting.PortableCrafting",
+			"client": "folk.sisby.portable_crafting.PortableCraftingClient"
 		},
 		"depends": [
 			{
