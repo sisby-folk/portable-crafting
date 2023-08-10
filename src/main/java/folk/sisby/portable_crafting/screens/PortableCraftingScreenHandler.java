@@ -7,10 +7,9 @@ import net.minecraft.screen.CraftingScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.text.Text;
-import net.minecraft.util.registry.Registry;
 
 public class PortableCraftingScreenHandler extends CraftingScreenHandler {
-	public static final ScreenHandlerType<PortableCraftingScreenHandler> PORTABLE_CRAFTING_HANDLER_TYPE = Registry.register(Registry.SCREEN_HANDLER, PortableCrafting.ID, new ScreenHandlerType<>(PortableCraftingScreenHandler::new));
+	public static final ScreenHandlerType<PortableCraftingScreenHandler> PORTABLE_CRAFTING_HANDLER_TYPE = ScreenHandlerType.register(PortableCrafting.ID, PortableCraftingScreenHandler::new);
 	public static final Text LABEL = Text.translatable("container.portable_crafting.portable_crafting_table");
 
 	public PortableCraftingScreenHandler(int syncId, PlayerInventory playerInventory) {

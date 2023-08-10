@@ -2,6 +2,9 @@ package folk.sisby.portable_crafting;
 
 import folk.sisby.portable_crafting.compat.inventory_tabs.PortableCraftingTab;
 import folk.sisby.portable_crafting.screens.PortableCraftingScreenHandler;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.screen.ScreenHandlerContext;
@@ -9,13 +12,10 @@ import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.loader.api.QuiltLoader;
-import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
-import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("deprecation")
 public class PortableCrafting implements ModInitializer {
 	public static final String ID = "portable_crafting";
 	public static final Logger LOGGER = LoggerFactory.getLogger("Portable Crafting");
@@ -28,10 +28,10 @@ public class PortableCrafting implements ModInitializer {
 	}
 
 	@Override
-	public void onInitialize(ModContainer mod) {
-		LOGGER.info("Portable Crafting Initializing!");
+	public void onInitialize() {
+		LOGGER.info("[Portable Crafting] Initializing!");
 
-		if (QuiltLoader.isModLoaded("inventorytabs")) {
+		if (FabricLoader.getInstance().isModLoaded("inventorytabs")) {
 			PortableCraftingTab.touch();
 		}
 
