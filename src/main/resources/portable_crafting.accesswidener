@@ -1,4 +1,5 @@
 accessWidener v1 named
 
+accessible method net/minecraft/screen/ScreenHandlerType register (Ljava/lang/String;Lnet/minecraft/screen/ScreenHandlerType$Factory;)Lnet/minecraft/screen/ScreenHandlerType;
 accessible field net/minecraft/screen/ScreenHandler type Lnet/minecraft/screen/ScreenHandlerType;
 mutable field net/minecraft/screen/ScreenHandler type Lnet/minecraft/screen/ScreenHandlerType;
