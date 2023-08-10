@@ -1,7 +1,9 @@
+<!--suppress HtmlDeprecatedTag, XmlDeprecatedElement -->
 <center>
   <img src="https://github.com/sisby-folk/portable-crafting/assets/55819817/2f13fef6-dfc9-4be2-86bc-7700f6cf788d" alt="screenshot"/><br/>
   Access the crafting table in your inventory, with a hotkey or tab.<br/>
-  Works well with <a href="https://modrinth.com/mod/inventory-tabs-updated">Inventory Tabs</a> and <a href="https://modrinth.com/mod/emi">EMI</a>
+  Requires <a href="https://modrinth.com/mod/connector">Connector</a> and <a href="https://modrinth.com/mod/forgified-fabric-api">FFAPI</a> on forge.<br/>
+  Works well with <a href="https://modrinth.com/mod/inventory-tabs-updated">Inventory Tabs</a> and <a href="https://modrinth.com/mod/emi">EMI</a>.
 </center>
 
 ---
