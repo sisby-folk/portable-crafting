@@ -117,10 +117,9 @@ if (System.getenv("MODRINTH_TOKEN")) {
 		versionType = 'release'
 		uploadFile = remapJar
 		gameVersions = [mc]
-		loaders = ['quilt']
+		loaders = ['quilt', 'fabric', 'forge']
 		detectLoaders = false
 		dependencies {
-			required.project "qsl"
 			optional.project "inventory-tabs-updated"
 		}
 		changelog = "Changelog: https://github.com/sisby-folk/portable-crafting/releases/tag/v" + origVersion
