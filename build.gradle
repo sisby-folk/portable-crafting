@@ -117,7 +117,7 @@ if (System.getenv("MODRINTH_TOKEN")) {
 		versionType = 'release'
 		uploadFile = remapJar
 		gameVersions = [mc]
-		loaders = ['quilt', 'fabric', 'forge']
+		loaders = ['quilt', 'fabric']
 		detectLoaders = false
 		dependencies {
 			optional.project "inventory-tabs-updated"
