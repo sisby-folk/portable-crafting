@@ -12,8 +12,8 @@
     "issues": "https://github.com/sisby-folk/portable-crafting/issues",
     "sources": "https://github.com/sisby-folk/portable-crafting"
   },
-  "license": "LGPL-3.0-only",
   "icon": "assets/portable_crafting/icon.png",
+  "license": "LGPL-3.0-only",
   "environment": "*",
   "entrypoints": {
     "main": [
