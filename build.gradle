@@ -31,15 +31,6 @@ dependencies {
 	mappings variantOf(libs.qm) { classifier "intermediary-v2" }
 	modImplementation libs.ql
 	modImplementation libs.qfapi
-
-	// // Compat // //
-	modCompileOnly(libs.inventoryTabs) {
-		exclude group: 'me.shedaniel'
-	}
-}
-
-loom {
-	accessWidenerPath = file("src/main/resources/portable_crafting.accesswidener")
 }
 
 processResources {

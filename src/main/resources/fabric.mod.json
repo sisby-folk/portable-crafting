@@ -3,7 +3,7 @@
   "id": "portable-crafting",
   "version": "${version}",
   "name": "Portable Crafting",
-  "description": "Allows using the crafting table in your inventory via a hotkey or tab.",
+  "description": "Allows opening crafting tables without placing them.",
   "authors": [
     "Sisby folk"
   ],
@@ -28,8 +28,5 @@
     "minecraft": ">=${mc}",
     "fabric": ">=${fapi}"
   },
-  "suggests": {
-    "inventorytabs": ">=0.6.1"
-  },
-  "accessWidener": "portable_crafting.accesswidener"
+  "mixins": ["portable_crafting.mixins.json"]
 }
