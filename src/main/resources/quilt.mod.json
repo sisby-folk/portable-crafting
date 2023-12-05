@@ -6,7 +6,7 @@
 		"version": "${version}",
 		"metadata": {
 			"name": "Portable Crafting",
-			"description": "Allows using the crafting table in your inventory via a hotkey or tab.",
+			"description": "Allows opening crafting tables without placing them.",
 			"contributors": {
 				"Sisby Folk": "Co-Authors"
 			},
@@ -34,13 +34,8 @@
 			{
 				"id": "quilted_fabric_api",
 				"versions": ">=${qfapi}"
-			},
-			{
-				"id": "inventorytabs",
-				"versions": ">=0.6.1",
-				"optional": true
 			}
 		]
 	},
-	"access_widener": "portable_crafting.accesswidener"
+	"mixin": ["portable_crafting.mixins.json"]
 }
