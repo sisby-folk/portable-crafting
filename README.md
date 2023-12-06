@@ -1,18 +1,20 @@
 <!--suppress HtmlDeprecatedTag, XmlDeprecatedElement -->
 <center>
-  <img src="https://github.com/sisby-folk/portable-crafting/assets/55819817/2f13fef6-dfc9-4be2-86bc-7700f6cf788d" alt="screenshot"/><br/>
-  Access the crafting table in your inventory, with a hotkey or tab.<br/>
+  <img src="https://cdn.modrinth.com/data/qmVRzDCY/images/cd8d1374acfc67fa55576d9c62b0860425f68183.png" alt="portable crafting preview"/><br/>
+  Allows opening crafting tables without placing them.<br/>
   Requires <a href="https://modrinth.com/mod/connector">Connector</a> and <a href="https://modrinth.com/mod/forgified-fabric-api">FFAPI</a> on forge.<br/>
-  Works well with <a href="https://modrinth.com/mod/inventory-tabs-updated">Inventory Tabs</a> and <a href="https://modrinth.com/mod/emi">EMI</a>.
+  Works well with <a href="https://modrinth.com/mod/inventory-tabs">Inventory Tabs</a> and <a href="https://modrinth.com/mod/emi">EMI</a>.
 </center>
 
 ---
 
-Use a hotkey (Default: `v`) to access the crafting table in your inventory at any time.
+Open any crafting table by using it without looking at a block.
 
-With inventory tabs, a tab is also shown.
+When installed on the client, press a key (Default: `v`) to open the crafting table in your inventory at any time.
 
-![screenshot](https://user-images.githubusercontent.com/55819817/175871674-5d2e9c56-5355-49a5-a42f-fa77dd442eec.png)
+Or, install alongside Inventory Tabs to show a clickable tab.
+
+![inventory tabs preview](https://cdn.modrinth.com/data/qmVRzDCY/images/b560c52e4471c37109f069ee612f9736e3c2b9ff.png)
 
 ## Afterword
 
