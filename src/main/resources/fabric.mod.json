@@ -28,5 +28,11 @@
     "minecraft": ">=${mc}",
     "fabric": ">=${fapi}"
   },
+  "suggests": {
+    "inventory-tabs": ">=${tabs}"
+  },
+  "breaks": {
+    "inventory-tabs": "<${tabs}"
+  },
   "mixins": ["portable_crafting.mixins.json"]
 }
