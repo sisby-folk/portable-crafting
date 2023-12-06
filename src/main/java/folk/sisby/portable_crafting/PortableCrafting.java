@@ -30,7 +30,6 @@ public class PortableCrafting implements ModInitializer {
 
 	public static void openCrafting(PlayerEntity player) {
 		if (player instanceof ServerPlayerEntity spe) {
-			spe.closeHandledScreen();
 			spe.openHandledScreen(new SimpleNamedScreenHandlerFactory((i, inv, p) -> new CraftingScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), new TranslatableText("container.crafting")));
 		}
 	}
