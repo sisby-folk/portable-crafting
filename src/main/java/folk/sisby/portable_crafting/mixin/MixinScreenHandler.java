@@ -18,7 +18,7 @@ public class MixinScreenHandler {
 		ScreenHandler self = (ScreenHandler) (Object) this;
 		if (actionType == SlotActionType.PICKUP && button == GLFW.GLFW_MOUSE_BUTTON_RIGHT && slotIndex >= 0 && slotIndex < self.slots.size()) {
 			 ItemStack stack = self.slots.get(slotIndex).getStack();
-			 if (stack.getCount() == 1 && stack.isIn(PortableCrafting.CRAFTING_TABLES) && PortableCrafting.canUse(player)) {
+			 if (stack.getCount() == 1 && stack.isIn(PortableCrafting.CRAFTING_TABLES) && PortableCrafting.canOpen(player)) {
 				PortableCrafting.openCrafting(player);
 				ci.cancel();
 			 }
