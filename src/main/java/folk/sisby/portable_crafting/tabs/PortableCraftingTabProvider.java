@@ -30,8 +30,7 @@ public class PortableCraftingTabProvider extends UniqueItemTabProvider {
 	public static void register() {
 		TabProviders.register(new Identifier(PortableCrafting.ID, "item_portable_crafting"), new PortableCraftingTabProvider());
 		TabManager.tabGuessers.put(new Identifier(PortableCrafting.ID, "hotkey_portable_crafting"), (screen, tabs) -> {
-			if (screen instanceof CraftingScreen && PortableCraftingClient.keyPressedRecently) {
-				PortableCraftingClient.keyPressedRecently = false;
+			if (screen.getClass() == CraftingScreen.class) {
 				for (Tab tab : tabs) {
 					if (tab instanceof ItemTab it && it.stack.isIn(PortableCrafting.CRAFTING_TABLES) || tab instanceof BlockTab bt && bt.block.asItem().getDefaultStack().isIn(PortableCrafting.CRAFTING_TABLES)) {
 						return tab;

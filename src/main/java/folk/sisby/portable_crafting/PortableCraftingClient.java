@@ -16,7 +16,6 @@ import static folk.sisby.portable_crafting.PortableCrafting.C2S_OPEN_PORTABLE_CR
 
 @SuppressWarnings("deprecation")
 public class PortableCraftingClient implements ClientModInitializer {
-	public static boolean keyPressedRecently = false;
 	public static KeyBind keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBind(
 		"key.portable_crafting.open_crafting_table",
 		InputUtil.Type.KEYSYM,
@@ -26,7 +25,6 @@ public class PortableCraftingClient implements ClientModInitializer {
 
 	public static boolean openCraftingTable() {
 		if (ClientPlayNetworking.canSend(C2S_OPEN_PORTABLE_CRAFTING) && PortableCrafting.canUse(MinecraftClient.getInstance().player)) {
-			keyPressedRecently = true;
 			ClientPlayNetworking.send(C2S_OPEN_PORTABLE_CRAFTING, PacketByteBufs.empty());
 			return true;
 		}
