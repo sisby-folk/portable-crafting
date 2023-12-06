@@ -8,9 +8,9 @@
 
 ---
 
-Open any crafting table by using it without looking at a block.
+Open any crafting table by right-clicking it in the inventory, or using it in the hand without looking at a block.
 
-When installed on the client, press a key (Default: `v`) to open the crafting table in your inventory at any time.
+When installed on the client, press a key (Default: `v`) to open the crafting table at any time you have one.
 
 Or, install alongside Inventory Tabs to show a clickable tab.
 
