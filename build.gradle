@@ -22,6 +22,7 @@ repositories {
 		url "https://api.modrinth.com/maven"
 		content { includeGroup "maven.modrinth" }
 	}
+	maven { url "https://repo.sleeping.town/" }
 }
 
 
@@ -31,15 +32,17 @@ dependencies {
 	mappings variantOf(libs.qm) { classifier "intermediary-v2" }
 	modImplementation libs.ql
 	modImplementation libs.qfapi
+	modCompileOnly libs.tabs
 }
 
 processResources {
 	final Map<String, String> map = [
-		"version"      : version.toString(),
-		"mc"           : libs.versions.mc.get(),
-		"ql"           : libs.versions.ql.get(),
-		"fapi"        : libs.versions.fapi.get(),
-		"qfapi"        : libs.versions.qfapi.get()
+		"version": version.toString(),
+		"mc"     : libs.versions.mc.get(),
+		"ql"     : libs.versions.ql.get(),
+		"fapi"   : libs.versions.fapi.get(),
+		"qfapi"  : libs.versions.qfapi.get(),
+		"tabs"   : libs.versions.tabs.get()
 	]
 
 	inputs.properties(map)
@@ -84,7 +87,7 @@ if (System.getenv("MODRINTH_TOKEN")) {
 		loaders = ['quilt', 'fabric']
 		detectLoaders = false
 		dependencies {
-			optional.project "inventory-tabs-updated"
+			optional.project "inventory-tabs"
 		}
 		changelog = "Changelog: https://github.com/sisby-folk/portable-crafting/releases/tag/v" + baseVersion
 		syncBodyFrom = rootProject.file("README.md").text

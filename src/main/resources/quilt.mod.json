@@ -34,6 +34,11 @@
 			{
 				"id": "quilted_fabric_api",
 				"versions": ">=${qfapi}"
+			},
+			{
+				"id": "inventory-tabs",
+				"versions": ">=${tabs}",
+				"optional": true
 			}
 		]
 	},
