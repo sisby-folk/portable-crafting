@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinCraftingScreenHandler {
 	@Inject(method = "canUse", at = @At("HEAD"), cancellable = true)
 	public void allowUsingCraftingTables(PlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
-		if (PortableCrafting.canUse(player)) {
+		if (PortableCrafting.canUse(player, (CraftingScreenHandler) (Object) this)) {
 			cir.setReturnValue(true);
 			cir.cancel();
 		}

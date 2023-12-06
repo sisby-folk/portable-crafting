@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.screen.CraftingScreenHandler;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -26,6 +27,12 @@ public class PortableCrafting implements ModInitializer {
 
 	public static boolean canUse(@Nullable PlayerEntity player) {
 		return player != null && player.currentScreenHandler.getClass() != CraftingScreenHandler.class && player.getInventory().contains(CRAFTING_TABLES);
+	}
+
+	public static boolean canUse(@Nullable PlayerEntity player, ScreenHandler handler) {
+		return player != null && player.getInventory().m_agfxrwtb(CRAFTING_TABLES)
+			|| handler.getCursorStack().isIn(CRAFTING_TABLES)
+			|| handler.slots.stream().anyMatch(s -> s.getStack().isIn(CRAFTING_TABLES));
 	}
 
 	public static void openCrafting(PlayerEntity player) {
