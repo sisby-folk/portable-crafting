@@ -87,7 +87,7 @@ if (System.getenv("MODRINTH_TOKEN")) {
 		loaders = ['quilt', 'fabric']
 		detectLoaders = false
 		dependencies {
-			optional.project "inventory-tabs-updated"
+			optional.project "inventory-tabs"
 		}
 		changelog = "Changelog: https://github.com/sisby-folk/portable-crafting/releases/tag/v" + baseVersion
 		syncBodyFrom = rootProject.file("README.md").text
