@@ -25,12 +25,12 @@ public class PortableCrafting implements ModInitializer {
 	public static final TagKey<Item> CRAFTING_TABLES = TagKey.of(Registry.ITEM_KEY, new Identifier(ID, "crafting_tables"));
 	public static final Identifier C2S_OPEN_PORTABLE_CRAFTING = new Identifier(ID, "c2s_open_portable_crafting");
 
-	public static boolean canUse(@Nullable PlayerEntity player) {
+	public static boolean canOpen(@Nullable PlayerEntity player) {
 		return player != null && player.currentScreenHandler.getClass() != CraftingScreenHandler.class && player.getInventory().contains(CRAFTING_TABLES);
 	}
 
-	public static boolean canUse(@Nullable PlayerEntity player, ScreenHandler handler) {
-		return player != null && player.getInventory().m_agfxrwtb(CRAFTING_TABLES)
+	public static boolean canUse(PlayerEntity player, ScreenHandler handler) {
+		return player.getInventory().contains(CRAFTING_TABLES)
 			|| handler.getCursorStack().isIn(CRAFTING_TABLES)
 			|| handler.slots.stream().anyMatch(s -> s.getStack().isIn(CRAFTING_TABLES));
 	}
@@ -44,7 +44,7 @@ public class PortableCrafting implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		ServerPlayNetworking.registerGlobalReceiver(C2S_OPEN_PORTABLE_CRAFTING, (server, player, handler, buf, sender) -> server.execute(() -> {
-			if (canUse(player)) openCrafting(player);
+			if (canOpen(player)) openCrafting(player);
 		}));
 		LOGGER.info("[Portable Crafting] Initialised!");
 	}

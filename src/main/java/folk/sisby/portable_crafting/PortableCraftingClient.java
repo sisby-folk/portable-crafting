@@ -24,7 +24,7 @@ public class PortableCraftingClient implements ClientModInitializer {
 	));
 
 	public static boolean openCraftingTable() {
-		if (ClientPlayNetworking.canSend(C2S_OPEN_PORTABLE_CRAFTING) && PortableCrafting.canUse(MinecraftClient.getInstance().player)) {
+		if (ClientPlayNetworking.canSend(C2S_OPEN_PORTABLE_CRAFTING) && PortableCrafting.canOpen(MinecraftClient.getInstance().player)) {
 			ClientPlayNetworking.send(C2S_OPEN_PORTABLE_CRAFTING, PacketByteBufs.empty());
 			return true;
 		}
