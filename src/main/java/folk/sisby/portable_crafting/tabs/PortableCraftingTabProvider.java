@@ -10,8 +10,15 @@ import folk.sisby.portable_crafting.PortableCrafting;
 import folk.sisby.portable_crafting.PortableCraftingClient;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.screen.ingame.CraftingScreen;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.network.ClientPlayerInteractionManager;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.Identifier;
+
+import java.util.Map;
+import java.util.function.Predicate;
 
 @SuppressWarnings("deprecation")
 public class PortableCraftingTabProvider extends UniqueItemTabProvider {
@@ -24,7 +31,7 @@ public class PortableCraftingTabProvider extends UniqueItemTabProvider {
 
 	@Override
 	public Tab createTab(ItemStack stack, int slot) {
-		return new PortableCraftingTab(stack, slot);
+		return new PortableCraftingTab(stack, slot, preclusions);
 	}
 
 	public static void register() {
@@ -42,13 +49,13 @@ public class PortableCraftingTabProvider extends UniqueItemTabProvider {
 	}
 
 	public static class PortableCraftingTab extends ItemTab {
-		public PortableCraftingTab(ItemStack stack, int slot) {
-			super(stack, slot, true);
+		public PortableCraftingTab(ItemStack stack, int slot, Map<Identifier, Predicate<ItemStack>> preclusions) {
+			super(stack, slot, preclusions, true);
 		}
 
 		@Override
-		public boolean open() {
-			return PortableCraftingClient.openCraftingTable();
+		public void open(ClientPlayerEntity player, ClientWorld world, ScreenHandler handler, ClientPlayerInteractionManager interactionManager) {
+			PortableCraftingClient.openCraftingTable();
 		}
 	}
 }
