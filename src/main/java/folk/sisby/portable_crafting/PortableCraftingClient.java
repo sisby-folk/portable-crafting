@@ -1,6 +1,5 @@
 package folk.sisby.portable_crafting;
 
-import com.mojang.blaze3d.platform.InputUtil;
 import folk.sisby.portable_crafting.tabs.PortableCraftingTabProvider;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -9,14 +8,14 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBind;
+import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 
 import static folk.sisby.portable_crafting.PortableCrafting.C2S_OPEN_PORTABLE_CRAFTING;
 
-@SuppressWarnings("deprecation")
 public class PortableCraftingClient implements ClientModInitializer {
-	public static KeyBind keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBind(
+	public static KeyBinding keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
 		"key.portable_crafting.open_crafting_table",
 		InputUtil.Type.KEYSYM,
 		GLFW.GLFW_KEY_V,

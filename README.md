@@ -20,4 +20,6 @@ Or, install alongside Inventory Tabs to show a clickable tab.
 
 All mods are built on the work of many others.
 
+This mod specifically is inspired by a similar feature from Svenhjol's Charm - one of the few implementations of portable crafting grids that didn't introduce new items at the time.
+
 We made this mod for [Tinkerer's Quilt](https://modrinth.com/modpack/tinkerers-quilt) - our modpack about ease of play and vanilla content.

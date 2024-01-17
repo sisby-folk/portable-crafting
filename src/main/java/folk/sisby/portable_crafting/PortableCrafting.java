@@ -17,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SuppressWarnings("deprecation")
 public class PortableCrafting implements ModInitializer {
 	public static final String ID = "portable_crafting";
 	public static final Logger LOGGER = LoggerFactory.getLogger(ID);

@@ -20,7 +20,6 @@ import net.minecraft.util.Identifier;
 import java.util.Map;
 import java.util.function.Predicate;
 
-@SuppressWarnings("deprecation")
 public class PortableCraftingTabProvider extends UniqueItemTabProvider {
 	PortableCraftingTabProvider() {
 		matches.put(new Identifier(PortableCrafting.ID, "crafting_tables"),
