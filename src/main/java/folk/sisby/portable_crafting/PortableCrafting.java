@@ -17,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SuppressWarnings("deprecation")
 public class PortableCrafting implements ModInitializer {
 	public static final String ID = "portable_crafting";
 	public static final Logger LOGGER = LoggerFactory.getLogger(ID);
@@ -26,11 +25,11 @@ public class PortableCrafting implements ModInitializer {
 	public static final Identifier C2S_OPEN_PORTABLE_CRAFTING = new Identifier(ID, "c2s_open_portable_crafting");
 
 	public static boolean canOpen(@Nullable PlayerEntity player) {
-		return player != null && player.currentScreenHandler.getClass() != CraftingScreenHandler.class && player.getInventory().m_agfxrwtb(CRAFTING_TABLES);
+		return player != null && player.currentScreenHandler.getClass() != CraftingScreenHandler.class && player.getInventory().contains(CRAFTING_TABLES);
 	}
 
 	public static boolean canUse(PlayerEntity player, ScreenHandler handler) {
-		return player.getInventory().m_agfxrwtb(CRAFTING_TABLES)
+		return player.getInventory().contains(CRAFTING_TABLES)
 			|| handler.getCursorStack().isIn(CRAFTING_TABLES)
 			|| handler.slots.stream().anyMatch(s -> s.getStack().isIn(CRAFTING_TABLES));
 	}

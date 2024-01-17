@@ -24,9 +24,9 @@
     ]
   },
   "depends": {
-    "fabricloader": ">=0.14.9",
+    "fabricloader": ">=${fl}",
     "minecraft": ">=${mc}",
-    "fabric": ">=${fapi}"
+    "fabric-api": ">=${fapi}"
   },
   "suggests": {
     "inventory-tabs": ">=${tabs}"
