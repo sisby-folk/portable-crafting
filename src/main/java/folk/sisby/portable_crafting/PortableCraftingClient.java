@@ -10,6 +10,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.item.Items;
 import org.lwjgl.glfw.GLFW;
 
 import static folk.sisby.portable_crafting.PortableCrafting.C2S_OPEN_PORTABLE_CRAFTING;
@@ -23,7 +24,7 @@ public class PortableCraftingClient implements ClientModInitializer {
 	));
 
 	public static boolean openCraftingTable() {
-		if (ClientPlayNetworking.canSend(C2S_OPEN_PORTABLE_CRAFTING) && PortableCrafting.canOpen(MinecraftClient.getInstance().player)) {
+		if (ClientPlayNetworking.canSend(C2S_OPEN_PORTABLE_CRAFTING) && PortableCrafting.openCrafting(MinecraftClient.getInstance().player, Items.CRAFTING_TABLE.getDefaultStack(), false)) {
 			ClientPlayNetworking.send(C2S_OPEN_PORTABLE_CRAFTING, PacketByteBufs.empty());
 			return true;
 		}
