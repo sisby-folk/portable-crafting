@@ -9,10 +9,10 @@
   "mixins": [
     "MixinItemStack",
     "MixinPlayerEntity",
-    "MixinScreenHandler",
-    "MixinServerPlayerEntity"
+    "MixinServerPlayerEntity",
+    "MixinServerPlayNetworkHandler"
   ],
   "client": [
-    "MixinMouse"
+    "MixinClientPlayInteractionManager"
   ]
 }

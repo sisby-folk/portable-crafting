@@ -32,6 +32,7 @@ public class PortableCrafting implements ModInitializer {
 
 	public static final Identifier S2C_SCREENS_ENABLED = new Identifier(ID, "s2c_screens_enabled");
 	public static final Identifier C2S_OPEN_PORTABLE_CRAFTING = new Identifier(ID, "c2s_open_portable_crafting");
+	public static boolean CHANGING_SCREENS;
 
 	public static boolean canUse(PlayerEntity player) {
 		TagKey<Item> tag = SCREEN_TYPES.getOrDefault(player.currentScreenHandler.getClass(), null);
@@ -42,9 +43,13 @@ public class PortableCrafting implements ModInitializer {
 
 	public static boolean openPortableCrafting(PlayerEntity player, ItemStack stack, boolean dry) {
 		Optional<TagKey<Item>> tag = SCREEN_FACTORIES.keySet().stream().filter(t -> CONFIG.screensEnabled.get(t.id().toString())).filter(stack::isIn).findFirst();
-		if (tag.isPresent() && (player == null || tag.get() != SCREEN_TYPES.getOrDefault(player.currentScreenHandler.getClass(), null)))
+		if (tag.isPresent())
 		{
-			if (!dry && player instanceof ServerPlayerEntity spe) spe.openHandledScreen(SCREEN_FACTORIES.get(tag.get()));
+			if (!dry && player instanceof ServerPlayerEntity spe && tag.get() != SCREEN_TYPES.getOrDefault(player.currentScreenHandler.getClass(), null)) {
+				CHANGING_SCREENS = true;
+				spe.openHandledScreen(SCREEN_FACTORIES.get(tag.get()));
+				CHANGING_SCREENS = false;
+			}
 			return true;
 		}
 		return false;
