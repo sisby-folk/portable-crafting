@@ -7,8 +7,12 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "MixinCraftingScreenHandler",
     "MixinItemStack",
-    "MixinScreenHandler"
+    "MixinPlayerEntity",
+    "MixinScreenHandler",
+    "MixinServerPlayerEntity"
+  ],
+  "client": [
+    "MixinMouse"
   ]
 }
