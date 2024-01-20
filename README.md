@@ -1,20 +1,31 @@
 <!--suppress HtmlDeprecatedTag, XmlDeprecatedElement -->
 <center>
-  <img src="https://cdn.modrinth.com/data/qmVRzDCY/images/cd8d1374acfc67fa55576d9c62b0860425f68183.png" alt="portable crafting preview"/><br/>
-  Allows opening crafting tables without placing them.<br/>
+  <img src="https://cdn.modrinth.com/data/qmVRzDCY/images/cbe8676bda07c29d468b5d7a78b7f4e04bb4ea55.gif" alt="portable crafting preview"/><br/>
+  Open crafting screens from your inventory.<br/>
   Requires <a href="https://modrinth.com/mod/connector">Connector</a> and <a href="https://modrinth.com/mod/forgified-fabric-api">FFAPI</a> on forge.<br/>
   Works well with <a href="https://modrinth.com/mod/inventory-tabs">Inventory Tabs</a> and <a href="https://modrinth.com/mod/emi">EMI</a>.
 </center>
 
 ---
 
-Open any crafting table by right-clicking it in the inventory, or using it in the hand without looking at a block.
+Portable Crafting operates primarily on the server-side. It allows you to:
 
-When installed on the client, press a key (Default: `v`) to open the crafting table at any time you have one.
+ - Right-click crafting stations in the inventory to open them.
+   - This includes crafting tables, smithing tables, stonecutters, grindstones, looms, and cartography tables.
+   - Alternatively, you can use crafting stations without targeting a block from the hand.
+ - Freely toggle each station via the config on the server side.
+ - Quick-open a crafting table from anywhere in your inventory using a hotkey (Default: `v`) when installed on the client.
+ - Access crafting stations directly via tabs when [Inventory Tabs](https://modrinth.com/mod/inventory-tabs) is installed.
 
-Or, install alongside Inventory Tabs to show a clickable tab.
+<center>
+    <img src="https://cdn.modrinth.com/data/qmVRzDCY/images/12deabe833db2a8507bc798b662e7a54373e41e4.png" alt="portable crafting tab preview"/><br/>
+</center>
 
-![inventory tabs preview](https://cdn.modrinth.com/data/qmVRzDCY/images/b560c52e4471c37109f069ee612f9736e3c2b9ff.png)
+### Addons
+
+Additional crafting stations can be registered through `PortableCrafting.registerCraftingScreen()`, providing an item tag, screen handler type, and screen handler factory.
+
+The modrinth maven can be used to set up portable crafting as a dependency.
 
 ## Afterword
 
