@@ -14,7 +14,7 @@ Portable Crafting operates primarily on the server-side. It allows you to:
    - This includes crafting tables, smithing tables, stonecutters, grindstones, looms, and cartography tables.
    - Alternatively, you can use crafting stations without targeting a block from the hand.
  - Freely toggle each station via the config on the server side.
- - Quick-open a crafting table from anywhere in your inventory using a hotkey (Default: `v`) when installed on the client.
+ - Open a crafting table from anywhere in your inventory using a hotkey (Default: `v`) when installed on the client.
  - Access crafting stations directly via tabs when [Inventory Tabs](https://modrinth.com/mod/inventory-tabs) is installed.
 
 <center>
