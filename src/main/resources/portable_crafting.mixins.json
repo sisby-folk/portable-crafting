@@ -11,5 +11,8 @@
     "MixinPlayerEntity",
     "MixinScreenHandler",
     "MixinServerPlayerEntity"
-    ]
+  ],
+  "client": [
+    "MixinMouse"
+  ]
 }

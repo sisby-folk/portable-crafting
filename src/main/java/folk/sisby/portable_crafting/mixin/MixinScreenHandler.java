@@ -1,6 +1,7 @@
 package folk.sisby.portable_crafting.mixin;
 
 import folk.sisby.portable_crafting.PortableCrafting;
+import folk.sisby.portable_crafting.PortableCraftingClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
@@ -27,11 +28,23 @@ public class MixinScreenHandler {
 		ScreenHandler self = (ScreenHandler) (Object) this;
 		if (actionType == SlotActionType.PICKUP && button == GLFW.GLFW_MOUSE_BUTTON_RIGHT && slotIndex >= 0 && slotIndex < self.slots.size()) {
 			ItemStack stack = self.slots.get(slotIndex).getStack();
-			if (stack.getCount() == 1 && PortableCrafting.openCrafting(player, stack, true)) {
-				previousCursorStack = self.getCursorStack().copy();
-				if (syncHandler != null) syncHandler.updateCursorStack(self, this.previousCursorStack);
-				PortableCrafting.openCrafting(player, stack, false);
-				ci.cancel();
+			if (stack.getCount() == 1) {
+				if (player.getWorld().isClient()) {
+					if (PortableCraftingClient.openPortableCrafting(stack, true)) {
+						// previousCursorStack = self.getCursorStack().copy();
+						// if (syncHandler != null) syncHandler.updateCursorStack(self, this.previousCursorStack);
+						PortableCraftingClient.CHANGING_SCREENS = true;
+						PortableCrafting.openPortableCrafting(player, stack, false);
+						ci.cancel();
+					}
+				} else {
+					if (PortableCrafting.openPortableCrafting(player, stack, true)) {
+						// previousCursorStack = self.getCursorStack().copy();
+						// if (syncHandler != null) syncHandler.updateCursorStack(self, this.previousCursorStack);
+						PortableCrafting.openPortableCrafting(player, stack, false);
+						ci.cancel();
+					}
+				}
 			}
 		}
 	}
