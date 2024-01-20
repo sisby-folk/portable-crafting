@@ -14,8 +14,8 @@ import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 
 import java.util.Map;

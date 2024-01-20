@@ -12,9 +12,9 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.HashSet;
@@ -51,7 +51,7 @@ public class PortableCraftingClient implements ClientModInitializer {
 		});
 		ClientPlayNetworking.registerGlobalReceiver(PortableCrafting.S2C_SCREENS_ENABLED, ((client, handler, buf, responseSender) -> {
 			SERVER_SCREENS_ENABLED.clear();
-			SERVER_SCREENS_ENABLED.addAll(buf.readList(b -> TagKey.of(Registry.ITEM_KEY, new Identifier(b.readString()))));
+			SERVER_SCREENS_ENABLED.addAll(buf.readList(b -> TagKey.of(RegistryKeys.ITEM, new Identifier(b.readString()))));
 		}));
 
 		if (FabricLoader.getInstance().isModLoaded("inventory-tabs")) {

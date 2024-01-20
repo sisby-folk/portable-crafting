@@ -8,7 +8,7 @@ fl = "0.15.0"
 yarn = "1.19.3+build.5"
 fapi = "0.76.1+1.19.3"
 kaleidoConfig = "0.2.0+1.2.0-beta.5"
-tabs = "1.1.5+1.18"
+tabs = "1.1.5+1.19"
 
 [plugins]
 loom = { id = "fabric-loom", version.ref = "loom" }
