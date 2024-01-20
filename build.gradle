@@ -33,8 +33,11 @@ dependencies {
 	mappings variantOf(libs.yarn) { classifier "v2" }
 	modImplementation libs.fl
 	modImplementation libs.fapi
+	implementation libs.kaleidoConfig
 
 	modCompileOnly libs.tabs
+
+	include libs.kaleidoConfig
 }
 
 processResources {
