@@ -1,5 +1,6 @@
 package folk.sisby.portable_crafting.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import folk.sisby.portable_crafting.PortableCrafting;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.item.ItemStack;
@@ -36,5 +37,29 @@ public class MixinServerPlayNetworkHandler {
 				}
 			}
 		}
+	}
+
+	@ModifyExpressionValue(method = "onClickSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/ScreenHandler;canUse(Lnet/minecraft/entity/player/PlayerEntity;)Z"))
+	private boolean slotCanUse(boolean original)
+	{
+		return original || PortableCrafting.canUse(this.player);
+	}
+
+	@ModifyExpressionValue(method = "onRenameItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/AnvilScreenHandler;canUse(Lnet/minecraft/entity/player/PlayerEntity;)Z"))
+	private boolean renameCanUse(boolean original)
+	{
+		return original || PortableCrafting.canUse(this.player);
+	}
+
+	@ModifyExpressionValue(method = "onCraftRequest", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/ScreenHandler;canUse(Lnet/minecraft/entity/player/PlayerEntity;)Z"))
+	private boolean craftCanUse(boolean original)
+	{
+		return original || PortableCrafting.canUse(this.player);
+	}
+
+	@ModifyExpressionValue(method = "onButtonClick", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/ScreenHandler;canUse(Lnet/minecraft/entity/player/PlayerEntity;)Z"))
+	private boolean buttonCanUse(boolean original)
+	{
+		return original || PortableCrafting.canUse(this.player);
 	}
 }
