@@ -92,9 +92,10 @@ if (System.getenv("MODRINTH_TOKEN") && file("CHANGELOG.md").exists() ) {
 		loaders = ['quilt', 'fabric', 'forge']
 		detectLoaders = false
 		dependencies {
-			optional.project "inventory-tabs"
+			required.version libs.fapi.get().getName(), libs.versions.fapi.get()
+			optional.version libs.tabs.get().getName(), libs.versions.tabs.get()
 		}
-		changelog = rootProject.file("CHANGELOG.md").text + "\n\nChangelog: https://github.com/sisby-folk/portable-crafting/releases/tag/v$baseVersion"
+		changelog = rootProject.file("CHANGELOG.md").text + "\n\nChangelog: https://github.com/sisby-folk/$project.name/releases/tag/v$baseVersion"
 		syncBodyFrom = rootProject.file("README.md").text
 	}
 }
@@ -104,7 +105,7 @@ if (System.getenv("GITHUB_TOKEN") && file("CHANGELOG.md").exists()) {
 	githubRelease {
 		token System.getenv("GITHUB_TOKEN")
 		owner "sisby-folk"
-		repo "portable-crafting"
+		repo "$project.name"
 		tagName 'v' + baseVersion
 		releaseName baseVersion
 		targetCommitish defaultBranch
