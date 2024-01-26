@@ -105,7 +105,7 @@ if (System.getenv("GITHUB_TOKEN") && file("CHANGELOG.md").exists()) {
 	githubRelease {
 		token System.getenv("GITHUB_TOKEN")
 		owner "sisby-folk"
-		repo "portable-crafting"
+		repo "$project.name"
 		tagName 'v' + baseVersion
 		releaseName baseVersion
 		targetCommitish defaultBranch
