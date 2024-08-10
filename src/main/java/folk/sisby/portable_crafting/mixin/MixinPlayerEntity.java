@@ -8,10 +8,8 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(PlayerEntity.class)
 public class MixinPlayerEntity {
-
 	@ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/ScreenHandler;canUse(Lnet/minecraft/entity/player/PlayerEntity;)Z"))
-	private boolean applyCanUse(boolean original)
-	{
+	private boolean applyCanUse(boolean original) {
 		return original || PortableCrafting.canUse((PlayerEntity) (Object) this);
 	}
 }

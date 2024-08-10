@@ -8,6 +8,7 @@ import folk.sisby.inventory_tabs.tabs.ItemTab;
 import folk.sisby.inventory_tabs.tabs.Tab;
 import folk.sisby.portable_crafting.PortableCrafting;
 import folk.sisby.portable_crafting.PortableCraftingClient;
+import folk.sisby.portable_crafting.packet.C2SOpenPortable;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
@@ -23,20 +24,15 @@ import java.util.function.Predicate;
 
 public class PortableCraftingTabProvider extends UniqueItemTabProvider {
 	PortableCraftingTabProvider() {
-		matches.put(new Identifier(PortableCrafting.ID, "crafting_tables"),
-			e -> ClientPlayNetworking.canSend(PortableCrafting.C2S_OPEN_PORTABLE_CRAFTING)
+		matches.put(Identifier.of(PortableCrafting.ID, "crafting_tables"),
+			e -> ClientPlayNetworking.canSend(C2SOpenPortable.ID)
 				&& PortableCraftingClient.openPortableCrafting(e.getDefaultStack(), true)
 		);
 	}
 
-	@Override
-	public Tab createTab(ItemStack stack, int slot) {
-		return new PortableCraftingTab(stack, slot, preclusions);
-	}
-
 	public static void register() {
-		TabProviders.register(new Identifier(PortableCrafting.ID, "item_portable_crafting"), new PortableCraftingTabProvider());
-		TabManager.tabGuessers.put(new Identifier(PortableCrafting.ID, "hotkey_portable_crafting"), (screen, tabs) -> {
+		TabProviders.register(Identifier.of(PortableCrafting.ID, "item_portable_crafting"), new PortableCraftingTabProvider());
+		TabManager.tabGuessers.put(Identifier.of(PortableCrafting.ID, "hotkey_portable_crafting"), (screen, tabs) -> {
 			TagKey<Item> tag = PortableCrafting.SCREEN_TYPES.getOrDefault(screen.getScreenHandler().getClass(), null);
 			if (tag != null) {
 				for (Tab tab : tabs) {
@@ -47,6 +43,11 @@ public class PortableCraftingTabProvider extends UniqueItemTabProvider {
 			}
 			return null;
 		});
+	}
+
+	@Override
+	public Tab createTab(ItemStack stack, int slot) {
+		return new PortableCraftingTab(stack, slot, preclusions);
 	}
 
 	public static class PortableCraftingTab extends ItemTab {

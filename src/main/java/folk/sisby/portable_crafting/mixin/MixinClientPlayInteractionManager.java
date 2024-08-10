@@ -24,7 +24,9 @@ import java.util.Map;
 
 @Mixin(ClientPlayerInteractionManager.class)
 public class MixinClientPlayInteractionManager {
-	@Shadow @Final private ClientPlayNetworkHandler networkHandler;
+	@Shadow
+	@Final
+	private ClientPlayNetworkHandler networkHandler;
 
 	@Inject(method = "clickSlot", at = @At("HEAD"), cancellable = true)
 	private void clickSlotOpenPortable(int syncId, int slotId, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci) {

@@ -1,38 +1,39 @@
 {
-  "schemaVersion": 1,
-  "id": "portable-crafting",
-  "version": "${version}",
-  "name": "Portable Crafting",
-  "description": "Allows opening crafting tables without placing them.",
-  "authors": [
-    "Sisby folk"
-  ],
-  "contact": {
-    "homepage": "https://modrinth.com/mod/portable-crafting",
-    "issues": "https://github.com/sisby-folk/portable-crafting/issues",
-    "sources": "https://github.com/sisby-folk/portable-crafting"
-  },
-  "icon": "assets/portable_crafting/icon.png",
-  "license": "LGPL-3.0-only",
-  "environment": "*",
-  "entrypoints": {
-    "main": [
-      "folk.sisby.portable_crafting.PortableCrafting"
-    ],
-    "client": [
-      "folk.sisby.portable_crafting.PortableCraftingClient"
-    ]
-  },
-  "depends": {
-    "fabricloader": ">=${fl}",
-    "minecraft": ">=${mc}",
-    "fabric-api": ">=${fapi}"
-  },
-  "suggests": {
-    "inventory-tabs": ">=${tabs}"
-  },
-  "breaks": {
-    "inventory-tabs": "<${tabs}"
-  },
-  "mixins": ["portable_crafting.mixins.json"]
+	"schemaVersion": 1,
+	"id": "${modId}",
+	"version": "${version}",
+	"name": "${modName}",
+	"description": "${modDescription}",
+	"authors": [
+		"${authors}"
+	],
+	"contact": {
+		"homepage": "${homepage}",
+		"issues": "${issues}",
+		"sources": "${sources}"
+	},
+	"license": "${license}",
+	"icon": "assets/${modId}/icon.png",
+	"entrypoints": {
+		"main": [
+			"folk.sisby.portable_crafting.PortableCrafting"
+		],
+		"client": [
+			"folk.sisby.portable_crafting.PortableCraftingClient"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=${fl}",
+		"minecraft": ">=${mc}",
+		"fabric-api": ">=${fapi}"
+	},
+	"suggests": {
+		"inventory-tabs": ">=${tabs}"
+	},
+	"breaks": {
+		"inventory-tabs": "<${tabs}"
+	},
+	"mixins": [
+		"portable_crafting.mixins.json"
+	]
 }
