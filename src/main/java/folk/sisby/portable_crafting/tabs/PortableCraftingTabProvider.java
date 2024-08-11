@@ -14,7 +14,6 @@ import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.Identifier;
 
@@ -32,10 +31,10 @@ public class PortableCraftingTabProvider extends UniqueItemTabProvider {
 	public static void register() {
 		TabProviders.register(PortableCrafting.id("item_portable_crafting"), new PortableCraftingTabProvider());
 		TabManager.tabGuessers.put(PortableCrafting.id("hotkey_portable_crafting"), (screen, tabs) -> {
-			TagKey<Item> tag = PortableCrafting.SCREEN_TYPES.getOrDefault(screen.getScreenHandler().getClass(), null);
-			if (tag != null) {
+			Item item = PortableCrafting.SCREEN_TYPES.getOrDefault(PortableCrafting.getType(screen.getScreenHandler()), null);
+			if (item != null) {
 				for (Tab tab : tabs) {
-					if (tab instanceof ItemTab it && it.stack.isIn(tag) || tab instanceof BlockTab bt && bt.block.asItem().getDefaultStack().isIn(tag)) {
+					if (tab instanceof ItemTab it && it.stack.isOf(item) || tab instanceof BlockTab bt && bt.block.asItem().getDefaultStack().isOf(item)) {
 						return tab;
 					}
 				}
