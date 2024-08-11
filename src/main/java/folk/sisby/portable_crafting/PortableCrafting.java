@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -92,9 +93,10 @@ public class PortableCrafting implements ModInitializer {
 	}
 
 	public void register(BlockItem item, ScreenHandlerType<?> handler) {
+		Block block = item.getBlock();
 		NamedScreenHandlerFactory factory = new SimpleNamedScreenHandlerFactory((i, inv, p) ->
-			((AbstractBlockAccessor) item.getBlock()).callCreateScreenHandlerFactory(null, p.getWorld(), p.getBlockPos()).createMenu(i, inv, p),
-			((AbstractBlockAccessor) item.getBlock()).callCreateScreenHandlerFactory(null, null, null).getDisplayName()
+			((AbstractBlockAccessor) block).callCreateScreenHandlerFactory(null, p.getWorld(), p.getBlockPos()).createMenu(i, inv, p),
+			((AbstractBlockAccessor) block).callCreateScreenHandlerFactory(null, null, null).getDisplayName()
 		);
 		SCREEN_TYPES.put(handler, item);
 		SCREEN_FACTORIES.put(item, factory);
