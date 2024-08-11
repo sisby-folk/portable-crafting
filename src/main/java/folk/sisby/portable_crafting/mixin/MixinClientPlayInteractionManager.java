@@ -47,7 +47,7 @@ public class MixinClientPlayInteractionManager {
 						new Int2ObjectOpenHashMap<>(Map.of(slotId, handler.getSlot(slotId).getStack().copy()))
 					));
 
-					MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK.value(), 1.0F));
+					MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 
 					ci.cancel();
 				}

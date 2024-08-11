@@ -13,7 +13,7 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.tag.TagKey;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.HashSet;

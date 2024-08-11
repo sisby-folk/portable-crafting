@@ -13,15 +13,14 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,12 +88,12 @@ public class PortableCrafting implements ModInitializer {
 			if (player.getInventory().containsAny(Set.of(packet.item()))) openPortableCrafting(player, packet.item().getDefaultStack(), false);
 		}));
 		CONFIG.blockItemScreens.forEach((blockId, handlerId) -> {
-			Item item = Registries.ITEM.get(Identifier.tryParse(blockId));
+			Item item = Registry.ITEM.get(Identifier.tryParse(blockId));
 			if (item == Items.AIR || !(item instanceof BlockItem blockItem)) {
 				LOGGER.warn("[Portable Crafting] Block item '{}' is invalid! Skipping.", blockId);
 				return;
 			}
-			ScreenHandlerType<?> handler = Registries.SCREEN_HANDLER.get(Identifier.tryParse(handlerId));
+			ScreenHandlerType<?> handler = Registry.SCREEN_HANDLER.get(Identifier.tryParse(handlerId));
 			if (handler == null) {
 				LOGGER.warn("[Portable Crafting] Screen handler '{}' is invalid! Skipping.", handlerId);
 				return;
@@ -102,7 +101,7 @@ public class PortableCrafting implements ModInitializer {
 			register(blockItem, handler);
 		});
 		CONFIG.blockItemTags.forEach((itemTag, blockId) -> {
-			Item item = Registries.ITEM.get(Identifier.tryParse(blockId));
+			Item item = Registry.ITEM.get(Identifier.tryParse(blockId));
 			if (item == Items.AIR || !(item instanceof BlockItem blockItem)) {
 				LOGGER.warn("[Portable Crafting] Tag block item '{}' is invalid! Skipping.", blockId);
 				return;
@@ -116,7 +115,7 @@ public class PortableCrafting implements ModInitializer {
 				LOGGER.warn("[Portable Crafting] Tag '{}' is invalid! Skipping.", itemTag);
 				return;
 			}
-			TAG_ITEMS.put(TagKey.of(RegistryKeys.ITEM, tagId), blockItem);
+			TAG_ITEMS.put(TagKey.of(Registry.ITEM_KEY, tagId), blockItem);
 		});
 		ServerPlayConnectionEvents.JOIN.register(((handler, sender, server) -> new S2CPortableTags(new ArrayList<>(ITEM_FACTORIES.keySet().stream().filter(i -> !TAG_ITEMS.containsValue(i)).toList()), new ArrayList<>(TAG_ITEMS.keySet())).send(handler.getPlayer())));
 		LOGGER.info("[Portable Crafting] Initialised!");

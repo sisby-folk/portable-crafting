@@ -5,11 +5,10 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 import java.util.List;
 
@@ -17,12 +16,12 @@ public record S2CPortableTags(List<Item> items, List<TagKey<Item>> tags) {
 	public static final Identifier ID = PortableCrafting.id("s2c_portable_tags");
 
 	public static S2CPortableTags fromBuf(PacketByteBuf buf) {
-		return new S2CPortableTags(buf.readList(b -> b.readRegistryValue(Registries.ITEM)), buf.readList(b -> TagKey.of(RegistryKeys.ITEM, b.readIdentifier())));
+		return new S2CPortableTags(buf.readList(b -> b.readRegistryValue(Registry.ITEM)), buf.readList(b -> TagKey.of(Registry.ITEM_KEY, b.readIdentifier())));
 	}
 
 	private PacketByteBuf toBuf() {
 		PacketByteBuf buf = PacketByteBufs.create();
-		buf.writeCollection(items, (b, i) -> b.writeRegistryValue(Registries.ITEM, i));
+		buf.writeCollection(items, (b, i) -> b.writeRegistryValue(Registry.ITEM, i));
 		buf.writeCollection(tags, (b, t) -> b.writeIdentifier(t.id()));
 		return buf;
 	}
