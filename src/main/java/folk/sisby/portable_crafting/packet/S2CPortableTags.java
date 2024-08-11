@@ -16,12 +16,12 @@ public record S2CPortableTags(List<Item> items, List<TagKey<Item>> tags) {
 	public static final Identifier ID = PortableCrafting.id("s2c_portable_tags");
 
 	public static S2CPortableTags fromBuf(PacketByteBuf buf) {
-		return new S2CPortableTags(buf.readList(b -> b.readRegistryValue(Registry.ITEM)), buf.readList(b -> TagKey.of(Registry.ITEM_KEY, b.readIdentifier())));
+		return new S2CPortableTags(buf.readList(b -> Item.byRawId(b.readVarInt())), buf.readList(b -> TagKey.of(Registry.ITEM_KEY, b.readIdentifier())));
 	}
 
 	private PacketByteBuf toBuf() {
 		PacketByteBuf buf = PacketByteBufs.create();
-		buf.writeCollection(items, (b, i) -> b.writeRegistryValue(Registry.ITEM, i));
+		buf.writeCollection(items, (b, i) -> b.writeVarInt(Item.getRawId(i)));
 		buf.writeCollection(tags, (b, t) -> b.writeIdentifier(t.id()));
 		return buf;
 	}

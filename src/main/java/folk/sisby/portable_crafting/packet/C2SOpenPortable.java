@@ -6,18 +6,17 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public record C2SOpenPortable(Item item) {
 	public static final Identifier ID = PortableCrafting.id("c2s_open_portable");
 
 	public static C2SOpenPortable fromBuf(PacketByteBuf buf) {
-		return new C2SOpenPortable(buf.readRegistryValue(Registry.ITEM));
+		return new C2SOpenPortable(Item.byRawId(buf.readVarInt()));
 	}
 
 	private PacketByteBuf toBuf() {
 		PacketByteBuf buf = PacketByteBufs.create();
-		buf.writeRegistryValue(Registry.ITEM, item);
+		buf.writeVarInt(Item.getRawId(item));
 		return buf;
 	}
 
