@@ -8,14 +8,13 @@ import folk.sisby.inventory_tabs.tabs.ItemTab;
 import folk.sisby.inventory_tabs.tabs.Tab;
 import folk.sisby.portable_crafting.PortableCrafting;
 import folk.sisby.portable_crafting.PortableCraftingClient;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import folk.sisby.portable_crafting.packet.C2SOpenPortable;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 
 import java.util.Map;
@@ -23,30 +22,30 @@ import java.util.function.Predicate;
 
 public class PortableCraftingTabProvider extends UniqueItemTabProvider {
 	PortableCraftingTabProvider() {
-		matches.put(new Identifier(PortableCrafting.ID, "crafting_tables"),
-			e -> ClientPlayNetworking.canSend(PortableCrafting.C2S_OPEN_PORTABLE_CRAFTING)
+		matches.put(PortableCrafting.id("crafting_tables"),
+			e -> C2SOpenPortable.canSend()
 				&& PortableCraftingClient.openPortableCrafting(e.getDefaultStack(), true)
 		);
 	}
 
-	@Override
-	public Tab createTab(ItemStack stack, int slot) {
-		return new PortableCraftingTab(stack, slot, preclusions);
-	}
-
 	public static void register() {
-		TabProviders.register(new Identifier(PortableCrafting.ID, "item_portable_crafting"), new PortableCraftingTabProvider());
-		TabManager.tabGuessers.put(new Identifier(PortableCrafting.ID, "hotkey_portable_crafting"), (screen, tabs) -> {
-			TagKey<Item> tag = PortableCrafting.SCREEN_TYPES.getOrDefault(screen.getScreenHandler().getClass(), null);
-			if (tag != null) {
+		TabProviders.register(PortableCrafting.id("item_portable_crafting"), new PortableCraftingTabProvider());
+		TabManager.tabGuessers.put(PortableCrafting.id("hotkey_portable_crafting"), (screen, tabs) -> {
+			Item item = PortableCrafting.TYPE_ITEMS.getOrDefault(PortableCrafting.getType(screen.getScreenHandler()), null);
+			if (item != null) {
 				for (Tab tab : tabs) {
-					if (tab instanceof ItemTab it && it.stack.isIn(tag) || tab instanceof BlockTab bt && bt.block.asItem().getDefaultStack().isIn(tag)) {
+					if (tab instanceof ItemTab it && it.stack.isOf(item) || tab instanceof BlockTab bt && bt.block.asItem().getDefaultStack().isOf(item)) {
 						return tab;
 					}
 				}
 			}
 			return null;
 		});
+	}
+
+	@Override
+	public Tab createTab(ItemStack stack, int slot) {
+		return new PortableCraftingTab(stack, slot, preclusions);
 	}
 
 	public static class PortableCraftingTab extends ItemTab {

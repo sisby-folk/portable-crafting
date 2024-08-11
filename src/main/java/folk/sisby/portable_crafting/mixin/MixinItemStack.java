@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ItemStack.class)
 public class MixinItemStack {
 	@Inject(method = "use", at = @At("HEAD"), cancellable = true)
-	public void allowUsingCraftingTables(World world, PlayerEntity player, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
+	public void usePortableWorkstation(World world, PlayerEntity player, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
 		ItemStack self = (ItemStack) (Object) this;
 		if (player instanceof ServerPlayerEntity spe && PortableCrafting.openPortableCrafting(spe, self, false)) {
 			cir.setReturnValue(TypedActionResult.success(self, false));

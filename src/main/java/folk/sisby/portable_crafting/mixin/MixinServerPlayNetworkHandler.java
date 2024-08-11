@@ -1,7 +1,8 @@
 package folk.sisby.portable_crafting.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import folk.sisby.portable_crafting.PortableCrafting;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import folk.sisby.portable_crafting.packet.S2CPortableTags;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
 import net.minecraft.screen.ScreenHandler;
@@ -27,7 +28,7 @@ public class MixinServerPlayNetworkHandler {
 			ItemStack stack = handler.slots.get(packet.getSlot()).getStack();
 			if (stack.getCount() == 1) {
 				if (PortableCrafting.openPortableCrafting(player, stack, true)) {
-					if (!ServerPlayNetworking.canSend(player, PortableCrafting.S2C_SCREENS_ENABLED)) {
+					if (!S2CPortableTags.canSend(player)) {
 						handler.nextRevision();
 						handler.updateToClient();
 					}
@@ -36,5 +37,25 @@ public class MixinServerPlayNetworkHandler {
 				}
 			}
 		}
+	}
+
+	@ModifyExpressionValue(method = "onClickSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/ScreenHandler;canUse(Lnet/minecraft/entity/player/PlayerEntity;)Z"))
+	private boolean slotCanUse(boolean original) {
+		return original || PortableCrafting.canUse(this.player);
+	}
+
+	@ModifyExpressionValue(method = "onRenameItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/AnvilScreenHandler;canUse(Lnet/minecraft/entity/player/PlayerEntity;)Z"))
+	private boolean renameCanUse(boolean original) {
+		return original || PortableCrafting.canUse(this.player);
+	}
+
+	@ModifyExpressionValue(method = "onCraftRequest", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/ScreenHandler;canUse(Lnet/minecraft/entity/player/PlayerEntity;)Z"))
+	private boolean craftCanUse(boolean original) {
+		return original || PortableCrafting.canUse(this.player);
+	}
+
+	@ModifyExpressionValue(method = "onButtonClick", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/ScreenHandler;canUse(Lnet/minecraft/entity/player/PlayerEntity;)Z"))
+	private boolean buttonCanUse(boolean original) {
+		return original || PortableCrafting.canUse(this.player);
 	}
 }

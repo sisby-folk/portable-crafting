@@ -1,53 +1,79 @@
 package folk.sisby.portable_crafting;
 
+import folk.sisby.portable_crafting.mixin.AbstractBlockAccessor;
+import folk.sisby.portable_crafting.packet.C2SOpenPortable;
+import folk.sisby.portable_crafting.packet.S2CPortableTags;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.screen.*;
+import net.minecraft.item.Items;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.tag.TagKey;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 public class PortableCrafting implements ModInitializer {
 	public static final String ID = "portable_crafting";
 	public static final Logger LOGGER = LoggerFactory.getLogger(ID);
 	public static final PortableCraftingConfig CONFIG = PortableCraftingConfig.createToml(FabricLoader.getInstance().getConfigDir(), "", "portable_crafting", PortableCraftingConfig.class);
-	public static final Map<TagKey<Item>, NamedScreenHandlerFactory> SCREEN_FACTORIES = new HashMap<>();
-	public static final Map<Class<? extends ScreenHandler>, TagKey<Item>> SCREEN_TYPES = new HashMap<>();
+	public static final Map<Item, NamedScreenHandlerFactory> ITEM_FACTORIES = new HashMap<>();
+	public static final Map<ScreenHandlerType<?>, Item> TYPE_ITEMS = new HashMap<>();
+	public static final Map<TagKey<Item>, Item> TAG_ITEMS = new HashMap<>();
 
-	public static final Identifier S2C_SCREENS_ENABLED = new Identifier(ID, "s2c_screens_enabled");
-	public static final Identifier C2S_OPEN_PORTABLE_CRAFTING = new Identifier(ID, "c2s_open_portable_crafting");
 	public static boolean CHANGING_SCREENS;
 
+	public static Identifier id(String path) {
+		return Identifier.of(ID, path);
+	}
+
 	public static boolean canUse(PlayerEntity player) {
-		TagKey<Item> tag = SCREEN_TYPES.getOrDefault(player.currentScreenHandler.getClass(), null);
-		return (tag != null) && (player.getInventory().contains(tag)
-				|| player.currentScreenHandler.getCursorStack().isIn(tag)
-				|| player.currentScreenHandler.slots.stream().anyMatch(s -> s.getStack().isIn(tag)));
+		Item item = TYPE_ITEMS.getOrDefault(getType(player.currentScreenHandler), null);
+		if (item == null) return false;
+		Set<TagKey<Item>> tags = new HashSet<>();
+		TAG_ITEMS.entrySet().stream().filter(e -> e.getValue() == item).map(Map.Entry::getKey).forEach(tags::add);
+		if (tags.isEmpty()) {
+			return player.getInventory().containsAny(Set.of(item))
+				|| player.currentScreenHandler.getCursorStack().isOf(item)
+				|| player.currentScreenHandler.slots.stream().anyMatch(s -> s.getStack().isOf(item));
+		} else {
+			return tags.stream().anyMatch(t -> player.getInventory().contains(t))
+				|| tags.stream().anyMatch(t -> player.currentScreenHandler.getCursorStack().isIn(t))
+				|| tags.stream().anyMatch(t -> player.currentScreenHandler.slots.stream().anyMatch(s -> s.getStack().isIn(t)));
+		}
+	}
+
+	public static ScreenHandlerType<?> getType(ScreenHandler handler) {
+		try {
+			return handler.getType();
+		} catch (UnsupportedOperationException ignored) {
+			return null;
+		}
 	}
 
 	public static boolean openPortableCrafting(PlayerEntity player, ItemStack stack, boolean dry) {
-		Optional<TagKey<Item>> tag = SCREEN_FACTORIES.keySet().stream().filter(t -> CONFIG.screensEnabled.get(t.id().toString())).filter(stack::isIn).findFirst();
-		if (tag.isPresent())
-		{
-			if (!dry && player instanceof ServerPlayerEntity spe && tag.get() != SCREEN_TYPES.getOrDefault(player.currentScreenHandler.getClass(), null)) {
+		Item item = ITEM_FACTORIES.containsKey(stack.getItem()) && !TAG_ITEMS.containsValue(stack.getItem()) ? stack.getItem() : TAG_ITEMS.entrySet().stream().filter(e -> stack.isIn(e.getKey())).map(Map.Entry::getValue).findFirst().orElse(null);
+		if (item != null) {
+			if (!dry && player instanceof ServerPlayerEntity spe && item != TYPE_ITEMS.getOrDefault(getType(player.currentScreenHandler), null)) {
 				CHANGING_SCREENS = true;
-				spe.openHandledScreen(SCREEN_FACTORIES.get(tag.get()));
+				spe.openHandledScreen(ITEM_FACTORIES.get(item));
 				CHANGING_SCREENS = false;
 			}
 			return true;
@@ -57,32 +83,51 @@ public class PortableCrafting implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		ServerPlayNetworking.registerGlobalReceiver(C2S_OPEN_PORTABLE_CRAFTING, (server, player, handler, buf, sender) -> {
-			Item item = Item.byRawId(buf.readVarInt());
-            server.execute(() -> {
-                if (player.getInventory().containsAny(Set.of(item))) openPortableCrafting(player, item.getDefaultStack(), false);
-            });
-        });
-		ServerPlayConnectionEvents.JOIN.register(((handler, sender, server) -> {
-			PacketByteBuf buf = PacketByteBufs.create();
-			buf.writeCollection(CONFIG.screensEnabled.keySet().stream().filter(CONFIG.screensEnabled::get).toList(), PacketByteBuf::writeString);
-			sender.sendPacket(S2C_SCREENS_ENABLED, buf);
+		ServerPlayNetworking.registerGlobalReceiver(C2SOpenPortable.ID, (server, player, handler, buf, sender) -> server.execute(() -> {
+			C2SOpenPortable packet = C2SOpenPortable.fromBuf(buf);
+			if (player.getInventory().containsAny(Set.of(packet.item()))) openPortableCrafting(player, packet.item().getDefaultStack(), false);
 		}));
-
-		registerCraftingScreen(true, TagKey.of(Registry.ITEM_KEY, new Identifier("c", "crafting_tables")), CraftingScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new CraftingScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), new TranslatableText("container.crafting")));
-		registerCraftingScreen(true, TagKey.of(Registry.ITEM_KEY, new Identifier("c", "smithing_tables")), SmithingScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new SmithingScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), new TranslatableText("container.upgrade")));
-		registerCraftingScreen(true, TagKey.of(Registry.ITEM_KEY, new Identifier("c", "grindstones")), GrindstoneScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new GrindstoneScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), new TranslatableText("container.grindstone_title")));
-		registerCraftingScreen(true, TagKey.of(Registry.ITEM_KEY, new Identifier("c", "cartography_tables")), CartographyTableScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new CartographyTableScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), new TranslatableText("container.cartography_table")));
-		registerCraftingScreen(true, TagKey.of(Registry.ITEM_KEY, new Identifier("c", "looms")), LoomScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new LoomScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), new TranslatableText("container.loom")));
-		registerCraftingScreen(true, TagKey.of(Registry.ITEM_KEY, new Identifier("c", "stonecutters")), StonecutterScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new StonecutterScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), new TranslatableText("container.stonecutter")));
-		registerCraftingScreen(false, TagKey.of(Registry.ITEM_KEY, new Identifier("c", "anvils")), AnvilScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new AnvilScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), new TranslatableText("container.repair")));
-
+		CONFIG.blockItemScreens.forEach((blockId, handlerId) -> {
+			Item item = Registry.ITEM.get(Identifier.tryParse(blockId));
+			if (item == Items.AIR || !(item instanceof BlockItem blockItem)) {
+				LOGGER.warn("[Portable Crafting] Block item '{}' is invalid! Skipping.", blockId);
+				return;
+			}
+			ScreenHandlerType<?> handler = Registry.SCREEN_HANDLER.get(Identifier.tryParse(handlerId));
+			if (handler == null) {
+				LOGGER.warn("[Portable Crafting] Screen handler '{}' is invalid! Skipping.", handlerId);
+				return;
+			}
+			register(blockItem, handler);
+		});
+		CONFIG.blockItemTags.forEach((itemTag, blockId) -> {
+			Item item = Registry.ITEM.get(Identifier.tryParse(blockId));
+			if (item == Items.AIR || !(item instanceof BlockItem blockItem)) {
+				LOGGER.warn("[Portable Crafting] Tag block item '{}' is invalid! Skipping.", blockId);
+				return;
+			}
+			if (!ITEM_FACTORIES.containsKey(item)) {
+				LOGGER.warn("[Portable Crafting] Block item '{}' isn't registered in blockItemScreens! Skipping.", blockId);
+				return;
+			}
+			Identifier tagId = Identifier.tryParse(itemTag);
+			if (tagId == null) {
+				LOGGER.warn("[Portable Crafting] Tag '{}' is invalid! Skipping.", itemTag);
+				return;
+			}
+			TAG_ITEMS.put(TagKey.of(Registry.ITEM_KEY, tagId), blockItem);
+		});
+		ServerPlayConnectionEvents.JOIN.register(((handler, sender, server) -> new S2CPortableTags(new ArrayList<>(ITEM_FACTORIES.keySet().stream().filter(i -> !TAG_ITEMS.containsValue(i)).toList()), new ArrayList<>(TAG_ITEMS.keySet())).send(handler.getPlayer())));
 		LOGGER.info("[Portable Crafting] Initialised!");
 	}
 
-	public void registerCraftingScreen(boolean enabled, TagKey<Item> tag, Class<? extends ScreenHandler> handler, NamedScreenHandlerFactory factory) {
-		SCREEN_TYPES.put(handler, tag);
-		SCREEN_FACTORIES.put(tag, factory);
-		CONFIG.screensEnabled.putIfAbsent(tag.id().toString(), enabled);
+	public void register(BlockItem item, ScreenHandlerType<?> handler) {
+		Block block = item.getBlock();
+		NamedScreenHandlerFactory factory = new SimpleNamedScreenHandlerFactory((i, inv, p) ->
+			((AbstractBlockAccessor) block).callCreateScreenHandlerFactory(null, p.getWorld(), p.getBlockPos()).createMenu(i, inv, p),
+			((AbstractBlockAccessor) block).callCreateScreenHandlerFactory(null, null, null).getDisplayName()
+		);
+		TYPE_ITEMS.put(handler, item);
+		ITEM_FACTORIES.put(item, factory);
 	}
 }
