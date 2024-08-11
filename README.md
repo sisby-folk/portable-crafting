@@ -44,7 +44,7 @@ Don't file issues for modded workstations! We can't fix them on our side.<br/>
 To function as portable workstations, blocks must:
 - Have no state/container, i.e. items cannot be left in them
 - Override `getMenuProvider` / `createScreenHandlerFactory` to open their screen
-- Not rely on the existence of a block at the position provided at any time
+- Have a screen that doesn't rely on the existence of a block at the position provided at any time
 - Have a screen that can be uniquely identified by a screen handler type
 
 ## Afterword
