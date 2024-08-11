@@ -25,6 +25,6 @@ public class PortableCraftingConfig extends WrappedConfig {
 	@Comment("Adding a Tag replaces the default by-ID item matching functionality")
 	@Comment("Item Tag - Item ID")
 	public final Map<String, String> blockItemTags = ValueMap.builder("")
-		.put("c:player_workstations/crafting_tables", "minecraft:crafting_table")
+		.put("c:crafting_tables", "minecraft:crafting_table")
 		.build();
 }

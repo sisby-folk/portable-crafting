@@ -4,7 +4,6 @@ import folk.sisby.portable_crafting.mixin.AbstractBlockAccessor;
 import folk.sisby.portable_crafting.packet.C2SOpenPortable;
 import folk.sisby.portable_crafting.packet.S2CPortableTags;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
@@ -85,10 +84,9 @@ public class PortableCrafting implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		PayloadTypeRegistry.playS2C().register(S2CPortableTags.ID, S2CPortableTags.CODEC);
-		PayloadTypeRegistry.playC2S().register(C2SOpenPortable.ID, C2SOpenPortable.CODEC);
-		ServerPlayNetworking.registerGlobalReceiver(C2SOpenPortable.ID, (packet, context) -> context.server().execute(() -> {
-			if (context.player().getInventory().containsAny(Set.of(packet.item()))) openPortableCrafting(context.player(), packet.item().getDefaultStack(), false);
+		ServerPlayNetworking.registerGlobalReceiver(C2SOpenPortable.ID, (server, player, handler, buf, sender) -> server.execute(() -> {
+			C2SOpenPortable packet = C2SOpenPortable.fromBuf(buf);
+			if (player.getInventory().containsAny(Set.of(packet.item()))) openPortableCrafting(player, packet.item().getDefaultStack(), false);
 		}));
 		CONFIG.blockItemScreens.forEach((blockId, handlerId) -> {
 			Item item = Registries.ITEM.get(Identifier.tryParse(blockId));

@@ -46,7 +46,8 @@ public class PortableCraftingClient implements ClientModInitializer {
 				openPortableCrafting(Items.CRAFTING_TABLE.getDefaultStack().copy(), false);
 			}
 		});
-		ClientPlayNetworking.registerGlobalReceiver(S2CPortableTags.ID, ((packet, context) -> {
+		ClientPlayNetworking.registerGlobalReceiver(S2CPortableTags.ID, ((client, context, buf, sender) -> {
+			S2CPortableTags packet = S2CPortableTags.fromBuf(buf);
 			SERVER_PORTABLE_WORKSTATIONS.clear();
 			SERVER_PORTABLE_WORKSTATION_TAGS.clear();
 			SERVER_PORTABLE_WORKSTATIONS.addAll(packet.items());

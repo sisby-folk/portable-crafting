@@ -1,7 +1,7 @@
 package folk.sisby.portable_crafting.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.WrapWithCondition;
 import folk.sisby.portable_crafting.PortableCrafting;
 import folk.sisby.portable_crafting.packet.S2CPortableTags;
 import net.minecraft.server.network.ServerPlayerEntity;
