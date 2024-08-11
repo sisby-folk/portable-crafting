@@ -35,7 +35,7 @@ Blocks _must_ open the specified screen handler on use, or this will not work.
 	"...item_tag" = "...block_item_from_above"
 ```
 
-Stateless modded blocks that follow the same conventions as vanilla's will work. Others may crash, so test as you go.<br/>
+Modded non-container workstations that use vanilla code conventions will work. Others crash, so test as you go.<br/>
 The config is synchronised to the client when mixed-side to display tabs and apply seam-hiding changes.
 
 ## Afterword
