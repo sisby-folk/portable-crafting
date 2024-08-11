@@ -13,13 +13,15 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.tag.TagKey;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class PortableCraftingClient implements ClientModInitializer {
-	public static final Set<Item> SERVER_SCREENS_ENABLED = new HashSet<>();
+	public static final Set<Item> SERVER_PORTABLE_WORKSTATIONS = new HashSet<>();
+	public static final Set<TagKey<Item>> SERVER_PORTABLE_WORKSTATION_TAGS = new HashSet<>();
 	public static KeyBinding keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
 		"key.portable_crafting.open_crafting_table",
 		InputUtil.Type.KEYSYM,
@@ -29,7 +31,7 @@ public class PortableCraftingClient implements ClientModInitializer {
 	public static boolean CHANGING_SCREENS = false;
 
 	public static boolean openPortableCrafting(ItemStack stack, boolean dry) {
-		if (C2SOpenPortable.canSend() && SERVER_SCREENS_ENABLED.stream().anyMatch(stack::isOf)) {
+		if (C2SOpenPortable.canSend() && (SERVER_PORTABLE_WORKSTATIONS.stream().anyMatch(stack::isOf) || SERVER_PORTABLE_WORKSTATION_TAGS.stream().anyMatch(stack::isIn))) {
 			if (!dry) new C2SOpenPortable(stack.getItem()).send();
 			return true;
 		}
@@ -45,8 +47,10 @@ public class PortableCraftingClient implements ClientModInitializer {
 			}
 		});
 		ClientPlayNetworking.registerGlobalReceiver(S2CPortableTags.ID, ((packet, context) -> {
-			SERVER_SCREENS_ENABLED.clear();
-			SERVER_SCREENS_ENABLED.addAll(packet.items());
+			SERVER_PORTABLE_WORKSTATIONS.clear();
+			SERVER_PORTABLE_WORKSTATION_TAGS.clear();
+			SERVER_PORTABLE_WORKSTATIONS.addAll(packet.items());
+			SERVER_PORTABLE_WORKSTATION_TAGS.addAll(packet.tags());
 		}));
 
 		if (FabricLoader.getInstance().isModLoaded("inventory-tabs")) {

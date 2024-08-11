@@ -13,7 +13,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
@@ -25,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,8 +36,9 @@ public class PortableCrafting implements ModInitializer {
 	public static final String ID = "portable_crafting";
 	public static final Logger LOGGER = LoggerFactory.getLogger(ID);
 	public static final PortableCraftingConfig CONFIG = PortableCraftingConfig.createToml(FabricLoader.getInstance().getConfigDir(), "", "portable_crafting", PortableCraftingConfig.class);
-	public static final Map<Item, NamedScreenHandlerFactory> SCREEN_FACTORIES = new HashMap<>();
-	public static final Map<ScreenHandlerType<?>, Item> SCREEN_TYPES = new HashMap<>();
+	public static final Map<Item, NamedScreenHandlerFactory> ITEM_FACTORIES = new HashMap<>();
+	public static final Map<ScreenHandlerType<?>, Item> TYPE_ITEMS = new HashMap<>();
+	public static final Map<TagKey<Item>, Item> TAG_ITEMS = new HashMap<>();
 
 	public static boolean CHANGING_SCREENS;
 
@@ -42,10 +47,16 @@ public class PortableCrafting implements ModInitializer {
 	}
 
 	public static boolean canUse(PlayerEntity player) {
-		Item item = SCREEN_TYPES.getOrDefault(getType(player.currentScreenHandler), null);
-		return (item != null) && (player.getInventory().containsAny(Set.of(item))
+		Item item = TYPE_ITEMS.getOrDefault(getType(player.currentScreenHandler), null);
+		if (item == null) return false;
+		Set<TagKey<Item>> tags = new HashSet<>();
+		TAG_ITEMS.entrySet().stream().filter(e -> e.getValue() == item).map(Map.Entry::getKey).forEach(tags::add);
+		return player.getInventory().containsAny(Set.of(item))
+			|| tags.stream().anyMatch(t -> player.getInventory().contains(t))
 			|| player.currentScreenHandler.getCursorStack().isOf(item)
-			|| player.currentScreenHandler.slots.stream().anyMatch(s -> s.getStack().isOf(item)));
+			|| tags.stream().anyMatch(t -> player.currentScreenHandler.getCursorStack().isIn(t))
+			|| player.currentScreenHandler.slots.stream().anyMatch(s -> s.getStack().isOf(item))
+			|| tags.stream().anyMatch(t -> player.currentScreenHandler.slots.stream().anyMatch(s -> s.getStack().isIn(t)));
 	}
 
 	public static ScreenHandlerType<?> getType(ScreenHandler handler) {
@@ -57,10 +68,11 @@ public class PortableCrafting implements ModInitializer {
 	}
 
 	public static boolean openPortableCrafting(PlayerEntity player, ItemStack stack, boolean dry) {
-		if (SCREEN_FACTORIES.containsKey(stack.getItem())) {
-			if (!dry && player instanceof ServerPlayerEntity spe && stack.getItem() != SCREEN_TYPES.getOrDefault(getType(player.currentScreenHandler), null)) {
+		Item item = ITEM_FACTORIES.containsKey(stack.getItem()) ? stack.getItem() : TAG_ITEMS.entrySet().stream().filter(e -> stack.isIn(e.getKey())).map(Map.Entry::getValue).findFirst().orElse(null);
+		if (item != null) {
+			if (!dry && player instanceof ServerPlayerEntity spe && item != TYPE_ITEMS.getOrDefault(getType(player.currentScreenHandler), null)) {
 				CHANGING_SCREENS = true;
-				spe.openHandledScreen(SCREEN_FACTORIES.get(stack.getItem()));
+				spe.openHandledScreen(ITEM_FACTORIES.get(item));
 				CHANGING_SCREENS = false;
 			}
 			return true;
@@ -75,9 +87,9 @@ public class PortableCrafting implements ModInitializer {
 		ServerPlayNetworking.registerGlobalReceiver(C2SOpenPortable.ID, (packet, context) -> context.server().execute(() -> {
 			if (context.player().getInventory().containsAny(Set.of(packet.item()))) openPortableCrafting(context.player(), packet.item().getDefaultStack(), false);
 		}));
-		CONFIG.blockScreens.forEach((blockId, handlerId) -> {
+		CONFIG.blockItemScreens.forEach((blockId, handlerId) -> {
 			Item item = Registries.ITEM.get(Identifier.tryParse(blockId));
-			if (!(item instanceof BlockItem blockItem)) {
+			if (item == Items.AIR || !(item instanceof BlockItem blockItem)) {
 				LOGGER.warn("[Portable Crafting] Block item '{}' is invalid! Skipping.", blockId);
 				return;
 			}
@@ -88,7 +100,24 @@ public class PortableCrafting implements ModInitializer {
 			}
 			register(blockItem, handler);
 		});
-		ServerPlayConnectionEvents.JOIN.register(((handler, sender, server) -> new S2CPortableTags(new ArrayList<>(SCREEN_FACTORIES.keySet())).send(handler.getPlayer())));
+		CONFIG.blockItemTags.forEach((itemTag, blockId) -> {
+			Item item = Registries.ITEM.get(Identifier.tryParse(blockId));
+			if (item == Items.AIR || !(item instanceof BlockItem blockItem)) {
+				LOGGER.warn("[Portable Crafting] Tag block item '{}' is invalid! Skipping.", blockId);
+				return;
+			}
+			if (!ITEM_FACTORIES.containsKey(item)) {
+				LOGGER.warn("[Portable Crafting] Block item '{}' isn't registered in blockItemScreens! Skipping.", blockId);
+				return;
+			}
+			Identifier tagId = Identifier.tryParse(itemTag);
+			if (tagId == null) {
+				LOGGER.warn("[Portable Crafting] Tag '{}' is invalid! Skipping.", itemTag);
+				return;
+			}
+			TAG_ITEMS.put(TagKey.of(RegistryKeys.ITEM, tagId), blockItem);
+		});
+		ServerPlayConnectionEvents.JOIN.register(((handler, sender, server) -> new S2CPortableTags(new ArrayList<>(ITEM_FACTORIES.keySet()), new ArrayList<>(TAG_ITEMS.keySet())).send(handler.getPlayer())));
 		LOGGER.info("[Portable Crafting] Initialised!");
 	}
 
@@ -98,7 +127,7 @@ public class PortableCrafting implements ModInitializer {
 			((AbstractBlockAccessor) block).callCreateScreenHandlerFactory(null, p.getWorld(), p.getBlockPos()).createMenu(i, inv, p),
 			((AbstractBlockAccessor) block).callCreateScreenHandlerFactory(null, null, null).getDisplayName()
 		);
-		SCREEN_TYPES.put(handler, item);
-		SCREEN_FACTORIES.put(item, factory);
+		TYPE_ITEMS.put(handler, item);
+		ITEM_FACTORIES.put(item, factory);
 	}
 }
