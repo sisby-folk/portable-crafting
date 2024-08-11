@@ -38,6 +38,15 @@ Blocks _must_ open the specified screen handler on use, or this will not work.
 Modded non-container workstations that use vanilla code conventions will work. Others crash, so test as you go.<br/>
 The config is synchronised to the client when mixed-side to display tabs and apply seam-hiding changes.
 
+#### Incompatible Blocks
+
+Don't file issues for modded workstations! We can't fix them on our side.<br/>
+To function as portable workstations, blocks must:
+- Have no state/container, i.e. items cannot be left in them
+- Override `getMenuProvider` / `createScreenHandlerFactory` to open their screen
+- Not rely on the existence of a block at the position provided at any time
+- Have a screen that can be uniquely identified by a screen handler type
+
 ## Afterword
 
 All mods are built on the work of many others.
