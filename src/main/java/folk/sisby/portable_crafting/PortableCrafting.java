@@ -83,10 +83,12 @@ public class PortableCrafting implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		ServerPlayNetworking.registerGlobalReceiver(C2SOpenPortable.ID, (server, player, handler, buf, sender) -> server.execute(() -> {
+		ServerPlayNetworking.registerGlobalReceiver(C2SOpenPortable.ID, (server, player, handler, buf, sender) -> {
 			C2SOpenPortable packet = C2SOpenPortable.fromBuf(buf);
-			if (player.getInventory().containsAny(Set.of(packet.item()))) openPortableCrafting(player, packet.item().getDefaultStack(), false);
-		}));
+			server.execute(() -> {
+				if (player.getInventory().containsAny(Set.of(packet.item()))) openPortableCrafting(player, packet.item().getDefaultStack(), false);
+			});
+		});
 		CONFIG.blockItemScreens.forEach((blockId, handlerId) -> {
 			Item item = Registry.ITEM.get(Identifier.tryParse(blockId));
 			if (item == Items.AIR || !(item instanceof BlockItem blockItem)) {
