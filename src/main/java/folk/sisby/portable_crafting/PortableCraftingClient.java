@@ -30,8 +30,8 @@ public class PortableCraftingClient implements ClientModInitializer {
 	public static boolean CHANGING_SCREENS = false;
 
 	public static boolean openPortableCrafting(ItemStack stack, boolean dry) {
-		if (ClientPlayNetworking.canSend(C2SOpenPortable.ID) && SERVER_SCREENS_ENABLED.stream().anyMatch(stack::isIn)) {
-			if (!dry) ClientPlayNetworking.send(new C2SOpenPortable(stack.getItem()));
+		if (C2SOpenPortable.canSend() && SERVER_SCREENS_ENABLED.stream().anyMatch(stack::isIn)) {
+			if (!dry) new C2SOpenPortable(stack.getItem()).send();
 			return true;
 		}
 		return false;

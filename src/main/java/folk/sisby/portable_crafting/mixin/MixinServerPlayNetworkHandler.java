@@ -3,7 +3,6 @@ package folk.sisby.portable_crafting.mixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import folk.sisby.portable_crafting.PortableCrafting;
 import folk.sisby.portable_crafting.packet.S2CPortableTags;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
 import net.minecraft.screen.ScreenHandler;
@@ -29,7 +28,7 @@ public class MixinServerPlayNetworkHandler {
 			ItemStack stack = handler.slots.get(packet.getSlot()).getStack();
 			if (stack.getCount() == 1) {
 				if (PortableCrafting.openPortableCrafting(player, stack, true)) {
-					if (!ServerPlayNetworking.canSend(player, S2CPortableTags.ID)) {
+					if (!S2CPortableTags.canSend(player)) {
 						handler.nextRevision();
 						handler.updateToClient();
 					}

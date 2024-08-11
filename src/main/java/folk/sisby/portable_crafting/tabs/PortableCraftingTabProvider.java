@@ -9,7 +9,6 @@ import folk.sisby.inventory_tabs.tabs.Tab;
 import folk.sisby.portable_crafting.PortableCrafting;
 import folk.sisby.portable_crafting.PortableCraftingClient;
 import folk.sisby.portable_crafting.packet.C2SOpenPortable;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.world.ClientWorld;
@@ -25,7 +24,7 @@ import java.util.function.Predicate;
 public class PortableCraftingTabProvider extends UniqueItemTabProvider {
 	PortableCraftingTabProvider() {
 		matches.put(PortableCrafting.id("crafting_tables"),
-			e -> ClientPlayNetworking.canSend(C2SOpenPortable.ID)
+			e -> C2SOpenPortable.canSend()
 				&& PortableCraftingClient.openPortableCrafting(e.getDefaultStack(), true)
 		);
 	}

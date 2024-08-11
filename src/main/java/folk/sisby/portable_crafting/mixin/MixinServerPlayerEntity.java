@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import folk.sisby.portable_crafting.PortableCrafting;
 import folk.sisby.portable_crafting.packet.S2CPortableTags;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,6 +17,6 @@ public class MixinServerPlayerEntity {
 
 	@WrapWithCondition(method = "openHandledScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;closeHandledScreen()V"))
 	private boolean dontCloseFromPortableScreen(ServerPlayerEntity instance) {
-		return !ServerPlayNetworking.canSend(instance, S2CPortableTags.ID) || !PortableCrafting.CHANGING_SCREENS;
+		return !S2CPortableTags.canSend(instance) || !PortableCrafting.CHANGING_SCREENS;
 	}
 }
