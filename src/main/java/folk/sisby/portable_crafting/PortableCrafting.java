@@ -51,12 +51,15 @@ public class PortableCrafting implements ModInitializer {
 		if (item == null) return false;
 		Set<TagKey<Item>> tags = new HashSet<>();
 		TAG_ITEMS.entrySet().stream().filter(e -> e.getValue() == item).map(Map.Entry::getKey).forEach(tags::add);
-		return player.getInventory().containsAny(Set.of(item))
-			|| tags.stream().anyMatch(t -> player.getInventory().contains(t))
-			|| player.currentScreenHandler.getCursorStack().isOf(item)
-			|| tags.stream().anyMatch(t -> player.currentScreenHandler.getCursorStack().isIn(t))
-			|| player.currentScreenHandler.slots.stream().anyMatch(s -> s.getStack().isOf(item))
-			|| tags.stream().anyMatch(t -> player.currentScreenHandler.slots.stream().anyMatch(s -> s.getStack().isIn(t)));
+		if (tags.isEmpty()) {
+			return player.getInventory().containsAny(Set.of(item))
+				|| player.currentScreenHandler.getCursorStack().isOf(item)
+				|| player.currentScreenHandler.slots.stream().anyMatch(s -> s.getStack().isOf(item));
+		} else {
+			return tags.stream().anyMatch(t -> player.getInventory().contains(t))
+				|| tags.stream().anyMatch(t -> player.currentScreenHandler.getCursorStack().isIn(t))
+				|| tags.stream().anyMatch(t -> player.currentScreenHandler.slots.stream().anyMatch(s -> s.getStack().isIn(t)));
+		}
 	}
 
 	public static ScreenHandlerType<?> getType(ScreenHandler handler) {
@@ -68,7 +71,7 @@ public class PortableCrafting implements ModInitializer {
 	}
 
 	public static boolean openPortableCrafting(PlayerEntity player, ItemStack stack, boolean dry) {
-		Item item = ITEM_FACTORIES.containsKey(stack.getItem()) ? stack.getItem() : TAG_ITEMS.entrySet().stream().filter(e -> stack.isIn(e.getKey())).map(Map.Entry::getValue).findFirst().orElse(null);
+		Item item = ITEM_FACTORIES.containsKey(stack.getItem()) && !TAG_ITEMS.containsValue(stack.getItem()) ? stack.getItem() : TAG_ITEMS.entrySet().stream().filter(e -> stack.isIn(e.getKey())).map(Map.Entry::getValue).findFirst().orElse(null);
 		if (item != null) {
 			if (!dry && player instanceof ServerPlayerEntity spe && item != TYPE_ITEMS.getOrDefault(getType(player.currentScreenHandler), null)) {
 				CHANGING_SCREENS = true;
@@ -117,7 +120,7 @@ public class PortableCrafting implements ModInitializer {
 			}
 			TAG_ITEMS.put(TagKey.of(RegistryKeys.ITEM, tagId), blockItem);
 		});
-		ServerPlayConnectionEvents.JOIN.register(((handler, sender, server) -> new S2CPortableTags(new ArrayList<>(ITEM_FACTORIES.keySet()), new ArrayList<>(TAG_ITEMS.keySet())).send(handler.getPlayer())));
+		ServerPlayConnectionEvents.JOIN.register(((handler, sender, server) -> new S2CPortableTags(new ArrayList<>(ITEM_FACTORIES.keySet().stream().filter(i -> !TAG_ITEMS.containsValue(i)).toList()), new ArrayList<>(TAG_ITEMS.keySet())).send(handler.getPlayer())));
 		LOGGER.info("[Portable Crafting] Initialised!");
 	}
 
