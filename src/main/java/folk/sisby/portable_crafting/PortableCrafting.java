@@ -43,6 +43,10 @@ public class PortableCrafting implements ModInitializer {
 
 	public static boolean CHANGING_SCREENS;
 
+	public static Identifier id(String path) {
+		return Identifier.of(ID, path);
+	}
+
 	public static boolean canUse(PlayerEntity player) {
 		TagKey<Item> tag = SCREEN_TYPES.getOrDefault(player.currentScreenHandler.getClass(), null);
 		return (tag != null) && (player.getInventory().contains(tag)
@@ -72,13 +76,13 @@ public class PortableCrafting implements ModInitializer {
 		}));
 		ServerPlayConnectionEvents.JOIN.register(((handler, sender, server) -> sender.sendPacket(new S2CPortableTags(CONFIG.getPortableTags()))));
 
-		registerCraftingScreen(true, TagKey.of(RegistryKeys.ITEM, Identifier.of("c", "player_workstations/crafting_tables")), CraftingScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new CraftingScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), Text.translatable("container.crafting")));
-		registerCraftingScreen(true, TagKey.of(RegistryKeys.ITEM, Identifier.of("c", "player_workstations/smithing_tables")), SmithingScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new SmithingScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), Text.translatable("container.upgrade")));
-		registerCraftingScreen(true, TagKey.of(RegistryKeys.ITEM, Identifier.of("c", "player_workstations/grindstones")), GrindstoneScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new GrindstoneScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), Text.translatable("container.grindstone_title")));
-		registerCraftingScreen(true, TagKey.of(RegistryKeys.ITEM, Identifier.of("c", "player_workstations/cartography_tables")), CartographyTableScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new CartographyTableScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), Text.translatable("container.cartography_table")));
-		registerCraftingScreen(true, TagKey.of(RegistryKeys.ITEM, Identifier.of("c", "player_workstations/looms")), LoomScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new LoomScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), Text.translatable("container.loom")));
-		registerCraftingScreen(true, TagKey.of(RegistryKeys.ITEM, Identifier.of("c", "player_workstations/stonecutters")), StonecutterScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new StonecutterScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), Text.translatable("container.stonecutter")));
-		registerCraftingScreen(false, TagKey.of(RegistryKeys.ITEM, Identifier.of("c", "player_workstations/anvils")), AnvilScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new AnvilScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), Text.translatable("container.repair")));
+		registerCraftingScreen(true, TagKey.of(RegistryKeys.ITEM, Identifier.tryParse("c:player_workstations/crafting_tables")), CraftingScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new CraftingScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), Text.translatable("container.crafting")));
+		registerCraftingScreen(true, TagKey.of(RegistryKeys.ITEM, Identifier.tryParse("c:player_workstations/smithing_tables")), SmithingScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new SmithingScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), Text.translatable("container.upgrade")));
+		registerCraftingScreen(true, TagKey.of(RegistryKeys.ITEM, Identifier.tryParse("c:player_workstations/grindstones")), GrindstoneScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new GrindstoneScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), Text.translatable("container.grindstone_title")));
+		registerCraftingScreen(true, TagKey.of(RegistryKeys.ITEM, Identifier.tryParse("c:player_workstations/cartography_tables")), CartographyTableScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new CartographyTableScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), Text.translatable("container.cartography_table")));
+		registerCraftingScreen(true, TagKey.of(RegistryKeys.ITEM, Identifier.tryParse("c:player_workstations/looms")), LoomScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new LoomScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), Text.translatable("container.loom")));
+		registerCraftingScreen(true, TagKey.of(RegistryKeys.ITEM, Identifier.tryParse("c:player_workstations/stonecutters")), StonecutterScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new StonecutterScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), Text.translatable("container.stonecutter")));
+		registerCraftingScreen(false, TagKey.of(RegistryKeys.ITEM, Identifier.tryParse("c:player_workstations/anvils")), AnvilScreenHandler.class, new SimpleNamedScreenHandlerFactory((i, inv, p) -> new AnvilScreenHandler(i, inv, ScreenHandlerContext.create(p.getWorld(), p.getBlockPos())), Text.translatable("container.repair")));
 
 		LOGGER.info("[Portable Crafting] Initialised!");
 	}

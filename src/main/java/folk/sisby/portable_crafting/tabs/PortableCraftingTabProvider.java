@@ -24,15 +24,15 @@ import java.util.function.Predicate;
 
 public class PortableCraftingTabProvider extends UniqueItemTabProvider {
 	PortableCraftingTabProvider() {
-		matches.put(Identifier.of(PortableCrafting.ID, "crafting_tables"),
+		matches.put(PortableCrafting.id("crafting_tables"),
 			e -> ClientPlayNetworking.canSend(C2SOpenPortable.ID)
 				&& PortableCraftingClient.openPortableCrafting(e.getDefaultStack(), true)
 		);
 	}
 
 	public static void register() {
-		TabProviders.register(Identifier.of(PortableCrafting.ID, "item_portable_crafting"), new PortableCraftingTabProvider());
-		TabManager.tabGuessers.put(Identifier.of(PortableCrafting.ID, "hotkey_portable_crafting"), (screen, tabs) -> {
+		TabProviders.register(PortableCrafting.id("item_portable_crafting"), new PortableCraftingTabProvider());
+		TabManager.tabGuessers.put(PortableCrafting.id("hotkey_portable_crafting"), (screen, tabs) -> {
 			TagKey<Item> tag = PortableCrafting.SCREEN_TYPES.getOrDefault(screen.getScreenHandler().getClass(), null);
 			if (tag != null) {
 				for (Tab tab : tabs) {
