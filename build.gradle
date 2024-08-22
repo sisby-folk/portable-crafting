@@ -8,7 +8,7 @@ plugins {
 }
 
 version = "$baseVersion+$branch"
-archivesBaseName = project.archivesName
+archivesBaseName = project.slug
 
 repositories {
 	maven { url "https://repo.sleeping.town/" }
@@ -21,9 +21,8 @@ dependencies {
 	minecraft libs.mc
 	mappings variantOf(libs.yarn) { classifier "v2" }
 	modImplementation libs.fl
-	modImplementation libs.fapi
 
-	modCompileOnly libs.tabs
+	modImplementation libs.fapi
 }
 
 processResources {
@@ -32,13 +31,13 @@ processResources {
 		modId         : modId,
 		modName       : modName,
 		modDescription: modDescription,
-		homepage      : homepage,
-		issues        : issues,
-		sources       : sources,
+		homepage      : "https://modrinth.com/mod/${slug}",
+		issues        : "https://github.com/${user}/${slug}/issues",
+		sources       : "https://github.com/${user}/${slug}",
 		license       : license,
 		authors       : authors.split(", ").join("\",\n    \""),
 		members       : "${authors}",
-		mc            : libs.versions.mc.get(),
+		mc            : compatibleVersions.split(", ")[0],
 		fl            : libs.versions.fl.get(),
 		fapi          : libs.versions.fapi.get(),
 		tabs          : libs.versions.tabs.get()
@@ -50,12 +49,13 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.encoding = "UTF-8"
-	it.options.release = 17
+	it.options.release = 8
 }
 
 java {
 	withSourcesJar()
-	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 jar {
@@ -64,31 +64,31 @@ jar {
 	}
 }
 
+githubRelease {
+	token = System.getenv("GITHUB_TOKEN")
+	owner = project.user
+	repo = slug
+	tagName = "v${baseVersion}+${tagBranch}"
+	targetCommitish = tagBranch
+	releaseAssets = remapJar
+	releaseName = "v${baseVersion}"
+	allowUploadToExisting = (tagBranch != branch)
+	body = !file("CHANGELOG.md").exists() ? "" : rootProject.file("CHANGELOG.md").text
+}
+
 modrinth {
 	token = System.getenv("MODRINTH_TOKEN")
-	projectId = project.name
+	projectId = slug
 	versionNumber = project.version
 	uploadFile = remapJar
 	gameVersions = compatibleVersions.split(", ").toList()
 	loaders = compatibleLoaders.split(", ").toList()
+	changelog = !file("CHANGELOG.md").exists() ? "" : rootProject.file("CHANGELOG.md").text + "\n\nChangelog: https://github.com/${user}/${slug}/releases/tag/v${baseVersion}+${tagBranch}"
+	syncBodyFrom = rootProject.file("README.md").text
 	dependencies {
 		required.version libs.fapi.get().getName(), libs.versions.fapi.get()
 		optional.version libs.tabs.get().getName(), libs.versions.tabs.get()
 	}
-	changelog = !file("CHANGELOG.md").exists() ? "" : rootProject.file("CHANGELOG.md").text + "\n\nChangelog: https://github.com/sisby-folk/$project.name/releases/tag/v$version"
-	syncBodyFrom = rootProject.file("README.md").text
-}
-
-githubRelease {
-	token System.getenv("GITHUB_TOKEN")
-	owner "sisby-folk"
-	repo project.name
-	tagName "v" + version
-	releaseName version
-	targetCommitish branch
-	releaseAssets remapJar
-	generateReleaseNotes true
-	body !file("CHANGELOG.md").exists() ? "" : rootProject.file("CHANGELOG.md").text
 }
 
 tasks.register("fullRelease") {
