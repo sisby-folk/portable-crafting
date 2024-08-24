@@ -23,6 +23,8 @@ dependencies {
 	modImplementation libs.fl
 
 	modImplementation libs.fapi
+
+	modCompileOnly libs.tabs
 }
 
 processResources {
@@ -49,13 +51,13 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.encoding = "UTF-8"
-	it.options.release = 8
+	it.options.release = 21
 }
 
 java {
 	withSourcesJar()
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_1_8
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
@@ -65,19 +67,20 @@ jar {
 }
 
 githubRelease {
-	token = System.getenv("GITHUB_TOKEN")
+	token = "$System.env.GITHUB_TOKEN"
 	owner = project.user
 	repo = slug
 	tagName = "v${baseVersion}+${tagBranch}"
 	targetCommitish = tagBranch
 	releaseAssets = remapJar
 	releaseName = "v${baseVersion}"
-	allowUploadToExisting = (tagBranch != branch)
+	allowUploadToExisting = true
+	generateReleaseNotes = true
 	body = !file("CHANGELOG.md").exists() ? "" : rootProject.file("CHANGELOG.md").text
 }
 
 modrinth {
-	token = System.getenv("MODRINTH_TOKEN")
+	token = "$System.env.MODRINTH_TOKEN"
 	projectId = slug
 	versionNumber = project.version
 	uploadFile = remapJar
