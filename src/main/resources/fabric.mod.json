@@ -34,6 +34,6 @@
 		"inventory-tabs": "<${tabs}"
 	},
 	"mixins": [
-		"portable_crafting.mixins.json"
+		"${modId}.mixins.json"
 	]
 }
