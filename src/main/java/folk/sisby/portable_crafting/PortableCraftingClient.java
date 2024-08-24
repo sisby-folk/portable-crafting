@@ -53,7 +53,7 @@ public class PortableCraftingClient implements ClientModInitializer {
 			SERVER_PORTABLE_WORKSTATION_TAGS.addAll(packet.tags());
 		}));
 
-		if (FabricLoader.getInstance().isModLoaded("inventory-tabs")) {
+		if (FabricLoader.getInstance().isModLoaded("inventory_tabs")) {
 			PortableCraftingTabProvider.register();
 		}
 		PortableCrafting.LOGGER.info("[Portable Crafting Client] Initialised!");
