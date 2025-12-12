@@ -5,6 +5,7 @@ plugins {
 	alias libs.plugins.loom
 	alias libs.plugins.githubRelease
 	alias libs.plugins.minotaur
+	alias libs.plugins.curse
 }
 
 version = "$baseVersion+$branch"
@@ -92,6 +93,20 @@ modrinth {
 		required.version libs.fapi.get().getName(), libs.versions.fapi.get()
 		optional.version libs.tabs.get().getName(), libs.versions.tabs.get()
 	}
+}
+
+tasks.register("curseforge", net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+	apiToken = "$System.env.CURSEFORGE_TOKEN"
+	disableVersionDetection()
+	def projectId = "1402899"
+	def mainFile = upload(projectId, remapJar)
+	compatibleLoaders.split(", ").toList().forEach { mainFile.addModLoader(it) }
+	compatibleVersions.split(", ").toList().forEach { mainFile.addGameVersion(it) }
+	mainFile.addEnvironment("client", "server")
+	mainFile.addRequirement(libs.fapi.get().getName())
+	mainFile.changelog = !file("CHANGELOG.md").exists() ? "" : rootProject.file("CHANGELOG.md").text + "\n\nChangelog: https://github.com/${user}/${slug}/releases/tag/v${baseVersion}+${tagBranch}"
+	mainFile.changelogType = "markdown"
+	mainFile.releaseType = "release"
 }
 
 tasks.register("fullRelease") {
