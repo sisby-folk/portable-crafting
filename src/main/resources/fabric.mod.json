@@ -14,14 +14,9 @@
 	},
 	"license": "${license}",
 	"icon": "assets/${modId}/icon.png",
-	"entrypoints": {
-		"main": [
-			"folk.sisby.portable_crafting.PortableCrafting"
-		],
-		"client": [
-			"folk.sisby.portable_crafting.PortableCraftingClient"
-		]
-	},
+	"mixins": [
+		"${modId}.mixins.json"
+	],
 	"depends": {
 		"fabricloader": ">=${fl}",
 		"minecraft": ">=${mc}",
@@ -33,7 +28,12 @@
 	"breaks": {
 		"inventory-tabs": "<${tabs}"
 	},
-	"mixins": [
-		"${modId}.mixins.json"
-	]
+	"entrypoints": {
+		"main": [
+			"folk.sisby.portable_crafting.PortableCrafting"
+		],
+		"client": [
+			"folk.sisby.portable_crafting.PortableCraftingClient"
+		]
+	}
 }
