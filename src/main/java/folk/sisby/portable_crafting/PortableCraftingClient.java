@@ -1,11 +1,14 @@
 package folk.sisby.portable_crafting;
 
 import folk.sisby.portable_crafting.packet.C2SOpenPortable;
+import folk.sisby.portable_crafting.packet.S2CDummy;
 import folk.sisby.portable_crafting.packet.S2CPortableTags;
 import folk.sisby.portable_crafting.tabs.PortableCraftingTabProvider;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.networking.v1.ClientConfigurationNetworking;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.option.KeyBinding;
@@ -13,6 +16,7 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.TagKey;
 import org.lwjgl.glfw.GLFW;
 
@@ -31,7 +35,7 @@ public class PortableCraftingClient implements ClientModInitializer {
 	public static boolean CHANGING_SCREENS = false;
 
 	public static boolean openPortableCrafting(ItemStack stack, boolean dry) {
-		if (C2SOpenPortable.canSend() && (SERVER_PORTABLE_WORKSTATIONS.stream().anyMatch(stack::isOf) || SERVER_PORTABLE_WORKSTATION_TAGS.stream().anyMatch(stack::isIn))) {
+		if (SERVER_PORTABLE_WORKSTATIONS.stream().anyMatch(stack::isOf) || SERVER_PORTABLE_WORKSTATION_TAGS.stream().anyMatch(stack::isIn)) {
 			if (!dry) new C2SOpenPortable(stack.getItem()).send();
 			return true;
 		}
@@ -46,12 +50,17 @@ public class PortableCraftingClient implements ClientModInitializer {
 				openPortableCrafting(Items.CRAFTING_TABLE.getDefaultStack().copy(), false);
 			}
 		});
-		ClientPlayNetworking.registerGlobalReceiver(S2CPortableTags.ID, ((packet, context) -> {
+		ClientPlayNetworking.registerGlobalReceiver(S2CDummy.ID, (p, c) -> {});
+		ClientConfigurationNetworking.registerGlobalReceiver(S2CPortableTags.ID, ((packet, context) -> {
 			SERVER_PORTABLE_WORKSTATIONS.clear();
 			SERVER_PORTABLE_WORKSTATION_TAGS.clear();
-			SERVER_PORTABLE_WORKSTATIONS.addAll(packet.items());
+			SERVER_PORTABLE_WORKSTATIONS.addAll(packet.items().stream().map(Registries.ITEM::getOrThrow).toList());
 			SERVER_PORTABLE_WORKSTATION_TAGS.addAll(packet.tags());
 		}));
+		ClientPlayConnectionEvents.DISCONNECT.register((p, c) -> {
+			SERVER_PORTABLE_WORKSTATIONS.clear();
+			SERVER_PORTABLE_WORKSTATION_TAGS.clear();
+		});
 
 		if (FabricLoader.getInstance().isModLoaded("inventory_tabs")) {
 			PortableCraftingTabProvider.register();

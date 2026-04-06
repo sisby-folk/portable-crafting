@@ -18,7 +18,7 @@ public record C2SOpenPortable(Item item) implements CustomPayload {
 	}
 
 	public void send() {
-		ClientPlayNetworking.send(this);
+		if (canSend()) ClientPlayNetworking.send(this);
 	}
 
 	@Override

@@ -26,6 +26,7 @@ dependencies {
 	modImplementation libs.fapi
 
 	modCompileOnly libs.tabs
+	modLocalRuntime libs.tabs
 }
 
 processResources {

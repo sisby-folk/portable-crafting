@@ -2,10 +2,11 @@ package folk.sisby.portable_crafting;
 
 import folk.sisby.portable_crafting.mixin.AbstractBlockAccessor;
 import folk.sisby.portable_crafting.packet.C2SOpenPortable;
+import folk.sisby.portable_crafting.packet.S2CDummy;
 import folk.sisby.portable_crafting.packet.S2CPortableTags;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerConfigurationConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class PortableCrafting implements ModInitializer {
@@ -51,15 +53,12 @@ public class PortableCrafting implements ModInitializer {
 		if (item == null) return false;
 		Set<TagKey<Item>> tags = new HashSet<>();
 		TAG_ITEMS.entrySet().stream().filter(e -> e.getValue() == item).map(Map.Entry::getKey).forEach(tags::add);
-		if (tags.isEmpty()) {
-			return player.getInventory().containsAny(Set.of(item))
-				|| player.currentScreenHandler.getCursorStack().isOf(item)
-				|| player.currentScreenHandler.slots.stream().anyMatch(s -> s.getStack().isOf(item));
-		} else {
-			return tags.stream().anyMatch(t -> player.getInventory().contains(t))
-				|| tags.stream().anyMatch(t -> player.currentScreenHandler.getCursorStack().isIn(t))
-				|| tags.stream().anyMatch(t -> player.currentScreenHandler.slots.stream().anyMatch(s -> s.getStack().isIn(t)));
-		}
+		return player.getInventory().containsAny(Set.of(item))
+			|| player.currentScreenHandler.getCursorStack().isOf(item)
+			|| player.currentScreenHandler.slots.stream().anyMatch(s -> s.getStack().isOf(item))
+			|| tags.stream().anyMatch(t -> player.getInventory().contains(t))
+			|| tags.stream().anyMatch(t -> player.currentScreenHandler.getCursorStack().isIn(t))
+			|| tags.stream().anyMatch(t -> player.currentScreenHandler.slots.stream().anyMatch(s -> s.getStack().isIn(t)));
 	}
 
 	public static ScreenHandlerType<?> getType(ScreenHandler handler) {
@@ -71,7 +70,7 @@ public class PortableCrafting implements ModInitializer {
 	}
 
 	public static boolean openPortableCrafting(PlayerEntity player, ItemStack stack, boolean dry) {
-		Item item = ITEM_FACTORIES.containsKey(stack.getItem()) && !TAG_ITEMS.containsValue(stack.getItem()) ? stack.getItem() : TAG_ITEMS.entrySet().stream().filter(e -> stack.isIn(e.getKey())).map(Map.Entry::getValue).findFirst().orElse(null);
+		Item item = ITEM_FACTORIES.containsKey(stack.getItem()) ? stack.getItem() : TAG_ITEMS.entrySet().stream().filter(e -> stack.isIn(e.getKey())).map(Map.Entry::getValue).findFirst().orElse(null);
 		if (item != null) {
 			if (!dry && player instanceof ServerPlayerEntity spe && item != TYPE_ITEMS.getOrDefault(getType(player.currentScreenHandler), null)) {
 				CHANGING_SCREENS = true;
@@ -85,7 +84,8 @@ public class PortableCrafting implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		PayloadTypeRegistry.playS2C().register(S2CPortableTags.ID, S2CPortableTags.CODEC);
+		PayloadTypeRegistry.configurationS2C().register(S2CPortableTags.ID, S2CPortableTags.CODEC);
+		PayloadTypeRegistry.playS2C().register(S2CDummy.ID, S2CDummy.CODEC);
 		PayloadTypeRegistry.playC2S().register(C2SOpenPortable.ID, C2SOpenPortable.CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(C2SOpenPortable.ID, (packet, context) -> context.server().execute(() -> {
 			if (context.player().getInventory().containsAny(Set.of(packet.item()))) openPortableCrafting(context.player(), packet.item().getDefaultStack(), false);
@@ -120,7 +120,10 @@ public class PortableCrafting implements ModInitializer {
 			}
 			TAG_ITEMS.put(TagKey.of(RegistryKeys.ITEM, tagId), blockItem);
 		});
-		ServerPlayConnectionEvents.JOIN.register(((handler, sender, server) -> new S2CPortableTags(new ArrayList<>(ITEM_FACTORIES.keySet().stream().filter(i -> !TAG_ITEMS.containsValue(i)).toList()), new ArrayList<>(TAG_ITEMS.keySet())).send(handler.getPlayer())));
+		ServerConfigurationConnectionEvents.CONFIGURE.register(((handler, server) -> new S2CPortableTags(
+			new ArrayList<>(ITEM_FACTORIES.keySet().stream().map(i -> server.getRegistryManager().get(RegistryKeys.ITEM).getKey(i).orElse(null)).filter(Objects::nonNull).toList()),
+			new ArrayList<>(TAG_ITEMS.keySet())
+		).send(handler)));
 		LOGGER.info("[Portable Crafting] Initialised!");
 	}
 
