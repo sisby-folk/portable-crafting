@@ -1,12 +1,13 @@
 package folk.sisby.portable_crafting.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import folk.sisby.portable_crafting.PortableCrafting;
 import folk.sisby.portable_crafting.packet.S2CDummy;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayerEntity.class)
 public class MixinServerPlayerEntity {
@@ -15,8 +16,8 @@ public class MixinServerPlayerEntity {
 		return original || PortableCrafting.canUse((ServerPlayerEntity) (Object) this);
 	}
 
-	@WrapWithCondition(method = "openHandledScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;closeHandledScreen()V"))
-	private boolean dontCloseFromPortableScreen(ServerPlayerEntity instance) {
-		return !S2CDummy.canSend(instance) || !PortableCrafting.CHANGING_SCREENS;
+	@Inject(method = "closeHandledScreen", at = @At(value = "HEAD"), cancellable = true)
+	private void dontCloseFromPortableScreen(CallbackInfo ci) {
+		if (PortableCrafting.CHANGING_SCREENS && S2CDummy.canSend((ServerPlayerEntity) (Object) this)) ci.cancel();
 	}
 }
