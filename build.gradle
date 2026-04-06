@@ -97,6 +97,7 @@ modrinth {
 }
 
 tasks.register("curseforge", net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+	group = "publishing"
 	apiToken = "$System.env.CURSEFORGE_TOKEN"
 	disableVersionDetection()
 	def projectId = "1402899"
@@ -114,4 +115,5 @@ tasks.register("fullRelease") {
 	group "publishing"
 	dependsOn "githubRelease"
 	dependsOn "modrinth"
+	dependsOn "curseforge"
 }
